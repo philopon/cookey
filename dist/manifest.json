@@ -1,0 +1,23 @@
+{
+    "manifest_version": 2,
+    "name": "key-assigner",
+    "version": "0.1.0",
+
+    "description": "Adds a red border to all webpages matching mozilla.org.",
+
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "match_about_blank": true,
+            "matches": ["<all_urls>"],
+            "js": ["js/content.js"],
+            "run_at": "document_start"
+        }
+    ],
+
+    "background": {
+        "scripts": ["js/background.js"]
+    },
+
+    "permissions": ["tabs", "find", "storage"]
+}

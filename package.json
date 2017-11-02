@@ -1,0 +1,18 @@
+{
+    "private": true,
+    "devDependencies": {
+        "npm-run-all": "~4.1.1",
+        "prettier": "~1.7.4",
+        "rollup": "~0.50.0",
+        "rollup-plugin-typescript": "~0.8.1",
+        "typescript": "~2.5.3",
+        "web-ext": "~2.2.2"
+    },
+    "scripts": {
+        "build:bundle": "rollup -c",
+        "lint": "web-ext lint -s dist",
+        "dev": "run-p dev:*",
+        "dev:bundle": "run-s \"build:bundle -- -w\"",
+        "dev:web-ext": "web-ext run -s dist --bc"
+    }
+}
