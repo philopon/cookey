@@ -1,28 +1,18 @@
-import { ScrollOptions, UP, DOWN, LEFT, RIGHT } from "../command";
-import { exhaustiveCheck } from "../utils";
+import { ScrollByOptions, ScrollToOptions } from "../command";
+import { HORIZONTAL, TOP } from "../command/direction";
 
-export default function scroll({ direction, amount }: ScrollOptions) {
-    const activeNode = document.activeElement;
-    if (activeNode.nodeName === "INPUT" || activeNode.nodeName === "TEXTAREA") {
-        return;
+export function scrollBy({ direction, amount }: ScrollByOptions) {
+    if (direction === HORIZONTAL) {
+        window.scrollBy(amount, 0);
+    } else {
+        window.scrollBy(0, amount);
     }
-    let x = 0;
-    let y = 0;
-    switch (direction) {
-        case UP:
-            y = -amount;
-            break;
-        case DOWN:
-            y = amount;
-            break;
-        case LEFT:
-            x = -amount;
-            break;
-        case RIGHT:
-            x = amount;
-            break;
-        default:
-            exhaustiveCheck(direction);
+}
+
+export function scrollTo({ position }: ScrollToOptions) {
+    if (position === TOP) {
+        window.scrollTo(0, 0);
+    } else {
+        window.scrollTo(0, document.body.scrollHeight);
     }
-    window.scrollBy(x, y);
 }

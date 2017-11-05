@@ -1,0 +1,15 @@
+.test {
+    all: initial;
+    color: white;
+    background-color: black;
+    opacity: 0.5;
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+
+    &:global > .neko {
+        color: red;
+    }
+}

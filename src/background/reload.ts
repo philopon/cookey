@@ -1,6 +1,6 @@
-import * as Cmd from "../command";
+import { ReloadOptions } from "../command";
 
-export default async function reload({ bypassCache }: Cmd.ReloadOptions) {
+export default async function reload({ bypassCache }: ReloadOptions) {
     const [tab] = await browser.tabs.query({ active: true });
-    console.log(await browser.tabs.reload(tab.id, { bypassCache }));
+    await browser.tabs.reload(tab.id, { bypassCache });
 }
