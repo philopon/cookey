@@ -19,5 +19,5 @@
         "scripts": ["js/background.js"]
     },
 
-    "permissions": ["tabs", "find", "storage", "<all_urls>"]
+    "permissions": ["tabs", "find", "storage", "clipboardWrite", "clipboardRead", "<all_urls>"]
 }

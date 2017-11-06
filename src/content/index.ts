@@ -1,31 +1,34 @@
 // import * as style from "../../sass/content.scss";
 import { Messages, KeyEvent, Loaded } from "../message/content-to-server";
-import * as Cmd from "../command";
+import * as Cmd from "../command/content";
 import { exhaustiveCheck } from "../utils";
 
 import { scrollBy, scrollTo } from "./scroll";
+import set_clipboard from "../set_clipboard";
 
 window.addEventListener("keypress", async event => {
     const activeNode = document.activeElement;
     if (activeNode.nodeName === "INPUT" || activeNode.nodeName === "TEXTAREA") {
         return;
     }
-    await browser.runtime.sendMessage<Messages>(KeyEvent(event));
+    const command = await browser.runtime.sendMessage<Messages>(KeyEvent(event));
+    if (command !== undefined) {
+        await dispatchCommand(command);
+    }
 });
 
-browser.runtime.onMessage.addListener<Cmd.ClientCommands>(async command => {
+async function dispatchCommand(command: Cmd.Commands): Promise<void> {
     switch (command.type) {
         case Cmd.SCROLL_BY:
-            await scrollBy(command);
-            break;
+            return await scrollBy(command);
         case Cmd.SCROLL_TO:
-            await scrollTo(command);
-            break;
-
+            return await scrollTo(command);
+        case Cmd.SET_CLIPBOARD:
+            return set_clipboard(command.value);
         default:
             exhaustiveCheck(command);
     }
-});
+}
 
 browser.runtime.sendMessage(Loaded());
 

@@ -26,8 +26,8 @@ function preprocessor(content, id) {
 }
 
 const cssExportMap = {};
-function makeEntry(entry, style = false) {
-    const plugins = [nodeResolve(), commonjs(), typescript({ typescript: tsc })];
+function makeEntry(src, dst, style = false) {
+    const plugins = [nodeResolve({ main: true }), commonjs(), typescript({ typescript: tsc })];
     if (style) {
         plugins.push(
             postcss({
@@ -55,13 +55,17 @@ function makeEntry(entry, style = false) {
         );
     }
     return {
-        entry: "src/" + entry + "/index.ts",
+        entry: "src/" + src,
         plugins,
         output: {
-            file: "dist/js/" + entry + ".js",
+            file: "dist/js/" + dst,
             format: "cjs",
         },
     };
 }
 
-export default [makeEntry("background"), makeEntry("content"), makeEntry("blur-focus")];
+export default [
+    makeEntry("background/index.ts", "background.js"),
+    makeEntry("content/index.ts", "content.js"),
+    makeEntry("blur-focus/index.ts", "blur-focus.js"),
+];

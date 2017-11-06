@@ -1,19 +1,23 @@
-import { NewTabOptions } from "../../command";
-import * as Dir from "../../command/direction";
+import { NewTabOptions } from "../../command/background";
+import { LEFT, RIGHT, FIRST, LAST } from "../../command/direction";
 import { exhaustiveCheck } from "../../utils";
 
-export default async function openPage({ address, background, position }: NewTabOptions) {
+export default async function openPage({
+    address,
+    background,
+    position,
+}: NewTabOptions): Promise<void> {
     const options: browser.tabs.CreateProperties = { url: address, active: !background };
     switch (position) {
-        case Dir.LAST:
+        case LAST:
             break;
-        case Dir.FIRST:
+        case FIRST:
             options.index = 0;
             break;
-        case Dir.LEFT:
-        case Dir.RIGHT:
+        case LEFT:
+        case RIGHT:
             const [active] = await browser.tabs.query({ active: true });
-            options.index = position === Dir.LEFT ? active.index : active.index + 1;
+            options.index = position === LEFT ? active.index : active.index + 1;
             break;
         default:
             exhaustiveCheck(position);

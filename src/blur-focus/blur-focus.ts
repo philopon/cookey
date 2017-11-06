@@ -1,20 +1,20 @@
 export default class BlurFocus {
-    public blur = this._blur.bind(this);
-    public end = this._end.bind(this);
+    public blur: () => void = this._blur.bind(this);
+    public end: () => void = this._end.bind(this);
 
-    _blur() {
+    _blur(): void {
         setTimeout(() => {
             (document.activeElement as HTMLElement).blur();
         });
     }
 
-    _end() {
+    _end(): void {
         document.removeEventListener("focus", this.blur, true);
         document.removeEventListener("mousedown", this.end);
         document.removeEventListener("keydown", this.end);
     }
 
-    register() {
+    register(): void {
         this.blur();
         document.addEventListener("focus", this.blur, true);
         document.addEventListener("mousedown", this.end);

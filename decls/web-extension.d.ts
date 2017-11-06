@@ -31,6 +31,8 @@ declare namespace browser {
         interface Tab {
             id: number;
             index: number;
+            pinned: boolean;
+            url: string;
         }
 
         interface Query {
@@ -40,7 +42,8 @@ declare namespace browser {
         function query(query: Query): Promise<Tab[]>;
 
         interface Update {
-            active: boolean;
+            active?: boolean;
+            url?: string;
         }
 
         function update(id: number, update: Update): Promise<Tab>;

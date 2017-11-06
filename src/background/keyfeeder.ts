@@ -1,9 +1,6 @@
 import { KeyConfig } from "../config";
 import { AllCommands } from "../command";
-import { KeyEventOptions } from "../message";
-
-import * as Cmd from "../command";
-import * as Dir from "../command/direction";
+import { KeyEventOptions } from "../message/content-to-server";
 
 class Tree<T> {
     public value?: T = undefined;
@@ -104,7 +101,7 @@ export class KeyFeeder {
         return this._feed(encodeKey(key));
     }
 
-    reset() {
+    reset(): void {
         this.current = this.tree;
     }
 }
