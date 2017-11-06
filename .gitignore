@@ -1,3 +1,4 @@
 node_modules/
 dist/*/
 js/
+web-ext-artifacts/
