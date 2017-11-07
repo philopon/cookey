@@ -1,10 +1,12 @@
-import * as Msg from "../message/content-to-server";
 import * as BC from "../command/background";
 import * as CC from "../command/content";
+import { AllCommands } from "../command";
 import * as Dir from "../command/direction";
 import { exhaustiveCheck } from "../utils";
 import { Config, KeyConfig } from "../config";
-import { KeyFeeder } from "./keyfeeder";
+import { Tree } from "../key";
+import * as B2C from "../message/backend-to-content";
+import * as C2B from "../message/content-to-backend";
 
 import switchTab from "./tab/switch";
 import newTab from "./tab/new";
@@ -12,8 +14,6 @@ import closeTab from "./tab/close";
 import reload from "./reload";
 import yank from "./tab/yank";
 import paste from "./tab/paste";
-
-let keyFeeder: KeyFeeder;
 
 (async function() {
     await browser.storage.local.set<Config>({
@@ -23,7 +23,6 @@ let keyFeeder: KeyFeeder;
             r: BC.Reload({ bypassCache: false }),
             R: BC.Reload({ bypassCache: true }),
             j: CC.ScrollBy({ amount: 150, direction: Dir.VERTICAL }),
-            "?": CC.ScrollBy({ amount: 150, direction: Dir.VERTICAL }),
             k: CC.ScrollBy({ amount: -150, direction: Dir.VERTICAL }),
             H: CC.ScrollBy({ amount: -150, direction: Dir.HORIZONTAL }),
             L: CC.ScrollBy({ amount: 150, direction: Dir.HORIZONTAL }),
@@ -39,17 +38,33 @@ let keyFeeder: KeyFeeder;
             p: BC.Paste({ newTab: false }),
             P: BC.Paste({ newTab: true, background: false, position: Dir.RIGHT }),
         },
-        blurFocus: false,
+        blurFocus: true,
     });
 })();
 
+let keyConfig: Tree<AllCommands> | undefined = undefined;
+let doBlurFocus: boolean = false;
+
 (async () => {
     const { key } = await browser.storage.local.get<KeyConfig>("key");
-    keyFeeder = new KeyFeeder(key);
+    const { blurFocus } = await browser.storage.local.get<boolean>("blurFocus");
+    doBlurFocus = blurFocus;
+    keyConfig = Tree.compile(key);
 })();
 
-async function dispatchCommand(cmd: BC.Commands): Promise<CC.Commands | void> {
+async function dispatchCommand(
+    cmd: BC.Commands | C2B.Messages,
+    sender: browser.runtime.MessageSender
+): Promise<B2C.Responses | B2C.SendConfig | void> {
     switch (cmd.type) {
+        case C2B.LOADED:
+            if (doBlurFocus) {
+                await blurFocus(sender.tab.id);
+            }
+            if (keyConfig) {
+                return B2C.SendConfig({ key: keyConfig });
+            }
+            return;
         case BC.SWITCH_TAB:
             return await switchTab(cmd);
         case BC.RELOAD:
@@ -77,23 +92,7 @@ async function blurFocus(id: number): Promise<void> {
     });
 }
 
-browser.runtime.onMessage.addListener<Msg.Messages, CC.Commands | void>(async function(
-    message,
-    sender
-) {
-    switch (message.type) {
-        case Msg.KEY_EVENT:
-            const cmd = keyFeeder.feed(message);
-            if (cmd === undefined || cmd === true || cmd === false) {
-                return;
-            }
-            return await dispatchCommand(cmd as BC.Commands);
-
-        case Msg.LOADED:
-            return await blurFocus(sender.tab.id);
-
-        default:
-            exhaustiveCheck(message);
-            return;
-    }
-});
+browser.runtime.onMessage.addListener<
+    C2B.Messages | BC.Commands,
+    B2C.Responses | B2C.SendConfig | void
+>(dispatchCommand);

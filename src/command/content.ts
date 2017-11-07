@@ -29,18 +29,10 @@ export function ScrollTo(args: ScrollToOptions): ScrollTo {
     return { type: SCROLL_TO, ...args };
 }
 
-export const SET_CLIPBOARD = "set-clipboard";
+export type Commands = ScrollBy | ScrollTo;
 
-export interface SetClipboardOptions {
-    value: string;
+const commands = new Set([SCROLL_BY, SCROLL_TO]);
+
+export function isContentCommand(cmd: { type: string }): cmd is Commands {
+    return commands.has(cmd.type);
 }
-
-export interface SetClipboard extends SetClipboardOptions {
-    type: typeof SET_CLIPBOARD;
-}
-
-export function SetClipboard({ value }: SetClipboardOptions): SetClipboard {
-    return { type: SET_CLIPBOARD, value };
-}
-
-export type Commands = ScrollBy | ScrollTo | SetClipboard;

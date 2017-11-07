@@ -1,8 +1,11 @@
-import { KeyConfig } from "../config";
 import { AllCommands } from "../command";
-import { KeyEventOptions } from "../message/content-to-server";
 
-class Tree<T> {
+export interface ITree<T> {
+    value?: T;
+    children: { [key: string]: ITree<T> };
+}
+
+export class Tree<T> {
     public value?: T = undefined;
     public children: { [key: string]: Tree<T> } = {};
 
@@ -21,14 +24,15 @@ class Tree<T> {
         }
         current.value = value;
     }
-}
 
-function alphabet(c: string): boolean {
-    return /[a-zA-Z]/.test(c);
-}
-
-function isUpperCase(c: string): boolean {
-    return /[A-Z]/.test(c);
+    static compile<T>(config: { [key: string]: T }): Tree<T> {
+        const tree = new Tree<T>();
+        for (const key in config) {
+            const keys = parseKey(key);
+            tree.add(keys, config[key]);
+        }
+        return tree;
+    }
 }
 
 const keyNames: { [key: string]: string } = {
@@ -56,25 +60,27 @@ function parseKey(key: string): string[] {
 
         return `${Array.from(mod)
             .sort()
-            .join("")}\t${canKey || key}`;
+            .join("")}${canKey || key}`;
     });
 }
 
-function encodeKey({ altKey, ctrlKey, metaKey, key }: KeyEventOptions): string {
+function encodeKey({ altKey, ctrlKey, metaKey, key }: KeyboardEvent): string {
     const modifiers = [altKey ? "A" : "", ctrlKey ? "C" : "", metaKey ? "M" : ""].join("");
-    return `${modifiers}\t${key}`;
+    return `${modifiers}${key}`;
+}
+
+const modifierKeys = new Set(["Control", "Shift", "Meta", "Alt"]);
+
+export function isModifierKey(k: string): boolean {
+    return modifierKeys.has(k);
 }
 
 export class KeyFeeder {
-    public tree: Tree<AllCommands>;
-    public current: Tree<AllCommands>;
+    public tree: ITree<AllCommands>;
+    public current: ITree<AllCommands>;
 
-    constructor(config: KeyConfig, public timeout: number = 500) {
-        this.current = this.tree = new Tree();
-        for (const key in config) {
-            const keys = parseKey(key);
-            this.tree.add(keys, config[key]);
-        }
+    constructor(tree: ITree<AllCommands>) {
+        this.current = this.tree = tree;
     }
 
     _feed(key: string): boolean | AllCommands {
@@ -91,7 +97,7 @@ export class KeyFeeder {
         return true;
     }
 
-    feed(key: KeyEventOptions): boolean | AllCommands | undefined {
+    feed(key: KeyboardEvent): boolean | AllCommands {
         return this._feed(encodeKey(key));
     }
 
