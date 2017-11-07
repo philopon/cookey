@@ -23,6 +23,7 @@ let keyFeeder: KeyFeeder;
             r: BC.Reload({ bypassCache: false }),
             R: BC.Reload({ bypassCache: true }),
             j: CC.ScrollBy({ amount: 150, direction: Dir.VERTICAL }),
+            "?": CC.ScrollBy({ amount: 150, direction: Dir.VERTICAL }),
             k: CC.ScrollBy({ amount: -150, direction: Dir.VERTICAL }),
             H: CC.ScrollBy({ amount: -150, direction: Dir.HORIZONTAL }),
             L: CC.ScrollBy({ amount: 150, direction: Dir.HORIZONTAL }),
@@ -76,10 +77,10 @@ async function blurFocus(id: number): Promise<void> {
     });
 }
 
-browser.runtime.onMessage.addListener<Msg.Messages>(async function(
+browser.runtime.onMessage.addListener<Msg.Messages, CC.Commands | void>(async function(
     message,
     sender
-): Promise<CC.Commands | void> {
+) {
     switch (message.type) {
         case Msg.KEY_EVENT:
             const cmd = keyFeeder.feed(message);

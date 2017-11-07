@@ -23,6 +23,10 @@ class Tree<T> {
     }
 }
 
+function alphabet(c: string): boolean {
+    return /[a-zA-Z]/.test(c);
+}
+
 function isUpperCase(c: string): boolean {
     return /[A-Z]/.test(c);
 }
@@ -48,11 +52,6 @@ function parseKey(key: string): string[] {
             key = modKey[0];
         }
 
-        if (isUpperCase(key)) {
-            mod.add("S");
-        }
-
-        key = key.toLowerCase();
         const canKey = keyNames[key];
 
         return `${Array.from(mod)
@@ -61,14 +60,9 @@ function parseKey(key: string): string[] {
     });
 }
 
-function encodeKey({ altKey, ctrlKey, metaKey, shiftKey, key }: KeyEventOptions): string {
-    const modifiers = [
-        altKey ? "A" : "",
-        ctrlKey ? "C" : "",
-        metaKey ? "M" : "",
-        shiftKey ? "S" : "",
-    ].join("");
-    return `${modifiers}\t${key.toLowerCase()}`;
+function encodeKey({ altKey, ctrlKey, metaKey, key }: KeyEventOptions): string {
+    const modifiers = [altKey ? "A" : "", ctrlKey ? "C" : "", metaKey ? "M" : ""].join("");
+    return `${modifiers}\t${key}`;
 }
 
 export class KeyFeeder {

@@ -6,7 +6,7 @@ declare namespace browser {
     }
 
     namespace runtime {
-        export function sendMessage<T>(msg: T): Promise<undefined>;
+        export function sendMessage<T = {}, R = {}>(msg: T): Promise<R>;
 
         export interface MessageSender {
             tab: tabs.Tab;
@@ -16,14 +16,12 @@ declare namespace browser {
             tlsChannelId: string;
         }
 
-        export interface OnMessageCallback<T> {
-            (msg: T, sender: MessageSender, sendResponse: (msg: any) => void): void;
-        }
+        type OnMessageCallback<T, R> = (msg: T, sender: MessageSender) => Promise<R>;
 
         export const onMessage: {
-            addListener<T>(callback: OnMessageCallback<T>): void;
-            removeListener<T>(callback: OnMessageCallback<T>): void;
-            hasListener<T>(callback: OnMessageCallback<T>): boolean;
+            addListener<T = {}, R = {}>(callback: OnMessageCallback<T, R>): void;
+            removeListener<T = {}, R = {}>(callback: OnMessageCallback<T, R>): void;
+            hasListener<T = {}, R = {}>(callback: OnMessageCallback<T, R>): boolean;
         };
     }
 
