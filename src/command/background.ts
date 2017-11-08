@@ -4,7 +4,6 @@ export const SWITCH_TAB = "switch-tab";
 
 export interface SwitchTabOptions {
     direction: Dir.LR;
-    count: number;
     cycle: boolean;
 }
 
@@ -57,7 +56,7 @@ export interface CloseTab extends CloseTabOptions {
     type: typeof CLOSE_TAB;
 }
 
-export function RemoveTab(args: CloseTabOptions): CloseTab {
+export function CloseTab(args: CloseTabOptions): CloseTab {
     return { type: CLOSE_TAB, ...args };
 }
 

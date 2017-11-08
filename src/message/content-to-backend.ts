@@ -1,11 +1,11 @@
-export const LOADED = "LOADED";
+export const PULL_CONFIG = "PULL_CONFIG";
 
-export interface Loaded {
-    type: typeof LOADED;
+export interface PullConfig {
+    type: typeof PULL_CONFIG;
 }
 
-export function Loaded(): Loaded {
-    return { type: LOADED };
+export function PullConfig(): PullConfig {
+    return { type: PULL_CONFIG };
 }
 
-export type Messages = Loaded;
+export type Messages = PullConfig;

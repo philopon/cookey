@@ -9,24 +9,36 @@ import { KeyFeeder, isModifierKey } from "../key";
 import { scrollBy, scrollTo } from "./scroll";
 import set_clipboard from "../set_clipboard";
 
-let keyFeeder: KeyFeeder | undefined = undefined;
+let keyFeeder: KeyFeeder;
+
+async function loadConfig(reload: boolean = false): Promise<void> {
+    if (!reload && keyFeeder) {
+        return;
+    }
+    const config = await browser.runtime.sendMessage<C2B.PullConfig, B2C.SendConfig>(
+        C2B.PullConfig()
+    );
+
+    keyFeeder = new KeyFeeder(config.key);
+}
 
 window.addEventListener("keydown", async event => {
+    await loadConfig();
     const activeNode = document.activeElement;
-    if (
-        keyFeeder === undefined ||
-        isModifierKey(event.key) ||
-        activeNode.nodeName === "INPUT" ||
-        activeNode.nodeName === "TEXTAREA"
-    ) {
+
+    if (isModifierKey(event.key)) {
         return;
     }
 
-    const feeded = keyFeeder.feed(event);
-    if (feeded === true || feeded === false) {
+    if (activeNode && (activeNode.nodeName === "INPUT" || activeNode.nodeName === "TEXTAREA")) {
+        return;
+    }
+
+    const [cmd, _feeded] = keyFeeder.feed(event);
+    if (cmd === true || cmd === false) {
     } else {
         event.preventDefault();
-        await dispatchCommand(feeded);
+        await dispatchCommand(cmd);
     }
 });
 
@@ -57,8 +69,3 @@ async function dispatchResponse(response: B2C.Responses): Promise<void> {
             return set_clipboard(response.value);
     }
 }
-
-(async () => {
-    const config = await browser.runtime.sendMessage<C2B.Loaded, B2C.SendConfig>(C2B.Loaded());
-    keyFeeder = new KeyFeeder(config.key);
-})();

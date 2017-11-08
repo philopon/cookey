@@ -37,9 +37,21 @@ export class Tree<T> {
 
 const keyNames: { [key: string]: string } = {
     space: " ",
-    esc: "escape",
-    "<esc>": "escape",
+    esc: "Escape",
+    "<esc>": "Escape",
 };
+
+const shiftable = new Set([
+    "Escape",
+    "Tab",
+    "Enter",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowUp",
+    "ArrowDown",
+    "Backspace",
+    " ",
+]);
 
 function parseKey(key: string): string[] {
     return key.split(/\s+/).map(k => {
@@ -56,7 +68,7 @@ function parseKey(key: string): string[] {
             key = modKey[0];
         }
 
-        const canKey = keyNames[key];
+        const canKey = keyNames[key.toLowerCase()];
 
         return `${Array.from(mod)
             .sort()
@@ -64,8 +76,13 @@ function parseKey(key: string): string[] {
     });
 }
 
-function encodeKey({ altKey, ctrlKey, metaKey, key }: KeyboardEvent): string {
-    const modifiers = [altKey ? "A" : "", ctrlKey ? "C" : "", metaKey ? "M" : ""].join("");
+function encodeKey({ altKey, ctrlKey, shiftKey, metaKey, key }: KeyboardEvent): string {
+    const modifiers = [
+        altKey ? "A" : "",
+        ctrlKey ? "C" : "",
+        metaKey ? "M" : "",
+        shiftKey && shiftable.has(key) ? "S" : "",
+    ].join("");
     return `${modifiers}${key}`;
 }
 
@@ -78,30 +95,33 @@ export function isModifierKey(k: string): boolean {
 export class KeyFeeder {
     public tree: ITree<AllCommands>;
     public current: ITree<AllCommands>;
+    public feeded: string[] = [];
 
     constructor(tree: ITree<AllCommands>) {
         this.current = this.tree = tree;
     }
 
-    _feed(key: string): boolean | AllCommands {
+    _feed(key: string): [boolean | AllCommands, string[]] {
         const next = this.current.children[key];
+        this.feeded.push(key);
         if (next === undefined) {
-            this.reset();
-            return false;
+            return [false, this.reset()];
         }
         if (Object.keys(next.children).length === 0) {
-            this.reset();
-            return next.value || false;
+            return [next.value || false, this.reset()];
         }
         this.current = next;
-        return true;
+        return [true, this.feeded];
     }
 
-    feed(key: KeyboardEvent): boolean | AllCommands {
+    feed(key: KeyboardEvent): [boolean | AllCommands, string[]] {
         return this._feed(encodeKey(key));
     }
 
-    reset(): void {
+    reset(): string[] {
         this.current = this.tree;
+        const old = this.feeded;
+        this.feeded = [];
+        return old;
     }
 }

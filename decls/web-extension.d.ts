@@ -1,10 +1,4 @@
 declare namespace browser {
-    interface Event<T> {
-        addListener(callback: (msg: T) => void): void;
-        removeListener(callback: (msg: T) => void): void;
-        hasListener(callback: (msg: T) => void): boolean;
-    }
-
     namespace runtime {
         export function sendMessage<T = {}, R = void>(msg: T): Promise<R>;
 
@@ -23,6 +17,8 @@ declare namespace browser {
             removeListener<T = {}, R = void>(callback: OnMessageCallback<T, R>): void;
             hasListener<T = {}, R = void>(callback: OnMessageCallback<T, R>): boolean;
         };
+
+        function getURL(path: string): string;
     }
 
     namespace tabs {
@@ -63,7 +59,21 @@ declare namespace browser {
 
         function remove(id: number): Promise<void>;
 
-        export const onCreated: Event<Tab>;
+        interface Event<CB> {
+            addListener(callback: CB): void;
+            removeListener(callback: CB): void;
+            hasListener(callback: CB): boolean;
+        }
+
+        export const onCreated: Event<(msg: Tab) => void>;
+
+        type ChangeInfo =
+            | {
+                  status: "complete";
+              }
+            | { status: "loading"; url?: string }
+            | { status: undefined; title: string };
+        export const onUpdated: Event<(tabId: number, changeInfo: ChangeInfo, tab: Tab) => void>;
 
         export interface ExecuteScriptOptions {
             allFrames?: boolean;

@@ -4,7 +4,10 @@ export default class BlurFocus {
 
     _blur(): void {
         setTimeout(() => {
-            (document.activeElement as HTMLElement).blur();
+            const active = document.activeElement as HTMLElement;
+            if (active && active.blur) {
+                active.blur();
+            }
         });
     }
 
