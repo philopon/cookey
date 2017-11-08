@@ -7,6 +7,7 @@ import { exhaustiveCheck } from "../utils";
 import { KeyFeeder, isModifierKey } from "../key";
 
 import { scrollBy, scrollTo } from "./scroll";
+import historyGo from "./history";
 import set_clipboard from "../set_clipboard";
 
 let keyFeeder: KeyFeeder;
@@ -22,10 +23,12 @@ async function loadConfig(reload: boolean = false): Promise<void> {
     keyFeeder = new KeyFeeder(config.key);
 }
 
-window.addEventListener("keydown", async event => {
-    await loadConfig();
+async function handleKeydown(event: KeyboardEvent): Promise<void> {
+    if (!keyFeeder) {
+        loadConfig().then(() => handleKeydown(event));
+        return;
+    }
     const activeNode = document.activeElement;
-
     if (isModifierKey(event.key)) {
         return;
     }
@@ -38,9 +41,12 @@ window.addEventListener("keydown", async event => {
     if (cmd === true || cmd === false) {
     } else {
         event.preventDefault();
+        event.stopImmediatePropagation();
         await dispatchCommand(cmd);
     }
-});
+}
+
+window.addEventListener("keydown", handleKeydown);
 
 async function dispatchContentCommand(command: CC.Commands): Promise<C2B.Messages | void> {
     switch (command.type) {
@@ -48,6 +54,8 @@ async function dispatchContentCommand(command: CC.Commands): Promise<C2B.Message
             return scrollBy(command);
         case CC.SCROLL_TO:
             return scrollTo(command);
+        case CC.HISTORY_GO:
+            return historyGo(command);
         default:
             exhaustiveCheck(command);
     }

@@ -11,10 +11,6 @@ export interface SwitchTab extends SwitchTabOptions {
     type: typeof SWITCH_TAB;
 }
 
-export function SwitchTab(args: SwitchTabOptions): SwitchTab {
-    return { type: SWITCH_TAB, ...args };
-}
-
 export const RELOAD = "reload";
 
 export interface ReloadOptions {
@@ -23,10 +19,6 @@ export interface ReloadOptions {
 
 export interface Reload extends ReloadOptions {
     type: typeof RELOAD;
-}
-
-export function Reload(args: ReloadOptions): Reload {
-    return { type: RELOAD, ...args };
 }
 
 export const NEW_TAB = "new-tab";
@@ -41,10 +33,6 @@ export interface NewTab extends NewTabOptions {
     type: typeof NEW_TAB;
 }
 
-export function NewTab(args: NewTabOptions): NewTab {
-    return { type: NEW_TAB, ...args };
-}
-
 export const CLOSE_TAB = "close-tab";
 
 export interface CloseTabOptions {
@@ -56,20 +44,12 @@ export interface CloseTab extends CloseTabOptions {
     type: typeof CLOSE_TAB;
 }
 
-export function CloseTab(args: CloseTabOptions): CloseTab {
-    return { type: CLOSE_TAB, ...args };
-}
-
 export const YANK = "yank";
 
 export interface YankOptions {}
 
 export interface Yank extends YankOptions {
     type: typeof YANK;
-}
-
-export function Yank(_: YankOptions): Yank {
-    return { type: YANK };
 }
 
 export const PASTE = "paste";
@@ -86,8 +66,14 @@ export type PasteOptions = NewTabPasteOptions | CurrentPasteOptions;
 
 export type Paste = PasteOptions & { type: typeof PASTE };
 
-export function Paste(args: PasteOptions): Paste {
-    return { type: PASTE, ...args };
+export const GO_UP = "go-up";
+
+export interface GoUpOptions {
+    top: boolean;
 }
 
-export type Commands = SwitchTab | Reload | NewTab | CloseTab | Yank | Paste;
+export interface GoUp extends GoUpOptions {
+    type: typeof GO_UP;
+}
+
+export type Commands = SwitchTab | Reload | NewTab | CloseTab | Yank | Paste | GoUp;

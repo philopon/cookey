@@ -73,3 +73,19 @@ position = "right"
 [key.S-esc]
 type = "reload"
 bypassCache = false
+
+[key."g u"]
+type = "go-up"
+top = false
+
+[key."g U"]
+type = "go-up"
+top = true
+
+[key.H]
+type = "history-go"
+amount = -1
+
+[key.L]
+type = "history-go"
+amount = 1

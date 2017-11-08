@@ -11,6 +11,8 @@ import closeTab from "./tab/close";
 import reload from "./reload";
 import yank from "./tab/yank";
 import paste from "./tab/paste";
+import goUp from "./goUp";
+
 import toml from "toml";
 
 let keyConfig: Tree<AllCommands>;
@@ -59,6 +61,8 @@ async function dispatchCommand(
             return await yank(cmd);
         case BC.PASTE:
             return await paste(cmd);
+        case BC.GO_UP:
+            return await goUp(cmd);
         default:
             exhaustiveCheck(cmd);
             return cmd;
