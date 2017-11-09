@@ -5,6 +5,7 @@ export const SEND_CONFIG = "SEND_CONFIG";
 
 export interface SendConfigPayload {
     key: ITree<AllCommands>;
+    ignore: { [key: string]: string[][] };
 }
 
 export interface SendConfig extends SendConfigPayload {

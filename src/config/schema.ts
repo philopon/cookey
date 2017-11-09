@@ -34,8 +34,20 @@ function jboolean(value: boolean | undefined = undefined) {
     return { type: "boolean", enum: [value] };
 }
 
-const jnumber = { type: "number" };
-const jstring = { type: "string" };
+function jarray(items?: Schema): Schema {
+    if (items) {
+        return { type: "array", items };
+    }
+    return { type: "array" };
+}
+
+function jnumber(): Schema {
+    return { type: "number" };
+}
+
+function jstring(): Schema {
+    return { type: "string" };
+}
 
 const switchTab = jobject(
     {
@@ -53,13 +65,13 @@ const reload = jobject({
 
 const scrollBy = jobject({
     type: jenum(CC.SCROLL_BY),
-    amount: jnumber,
+    amount: jnumber(),
     direction: jenum(Dir.HORIZONTAL, Dir.VERTICAL),
 });
 
 const newTab = jobject({
     type: jenum(BC.NEW_TAB),
-    address: jstring,
+    address: jstring(),
     background: jboolean(),
     position: jenum(Dir.FIRST, Dir.LAST, Dir.RIGHT, Dir.LEFT),
 });
@@ -102,7 +114,7 @@ const goUp = jobject({
 const historyGo = jobject(
     {
         type: jenum(CC.HISTORY_GO),
-        amount: jnumber,
+        amount: jnumber(),
     },
     ["amount"]
 );
@@ -115,6 +127,13 @@ const schema: Schema = {
     additionalProperties: false,
     properties: {
         blurFocus: jboolean(),
+        ignore: {
+            type: "object",
+            additionalProperties: false,
+            patternProperties: {
+                ".*": jarray(jstring()),
+            },
+        },
         key: {
             type: "object",
             additionalProperties: false,

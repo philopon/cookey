@@ -1,7 +1,8 @@
 import * as BC from "../command/background";
 import { AllCommands } from "../command";
 import { exhaustiveCheck } from "../utils";
-import { Tree } from "../key";
+import { Tree, parseKey } from "../key";
+import { Config } from "../config";
 import * as B2C from "../message/background-to-content";
 import * as C2B from "../message/content-to-background";
 
@@ -18,13 +19,14 @@ import toml from "toml";
 
 let keyConfig: Tree<AllCommands>;
 let doBlurFocus: boolean = false;
+let ignore: { [key: string]: string[][] };
 
 async function getDefaultConfig(): Promise<string> {
     const response = await fetch(browser.runtime.getURL("config.toml"));
     return await response.text();
 }
 
-async function parseConfig(config: string): Promise<any> {
+async function parseConfig(config: string): Promise<Config> {
     return toml.parse(config);
 }
 
@@ -41,6 +43,10 @@ async function loadConfig(reload: boolean = false): Promise<void> {
     const parsed = await parseConfig(config);
     doBlurFocus = parsed.blurFocus;
     keyConfig = Tree.compile(parsed.key);
+    ignore = {};
+    for (const key of Object.keys(parsed.ignore || {})) {
+        ignore[key] = parsed.ignore[key].map(k => parseKey(k));
+    }
 }
 
 async function dispatchCommand(
@@ -49,7 +55,7 @@ async function dispatchCommand(
     switch (cmd.type) {
         case C2B.PULL_CONFIG:
             await loadConfig();
-            return B2C.SendConfig({ key: keyConfig });
+            return B2C.SendConfig({ key: keyConfig, ignore });
         case BC.SWITCH_TAB:
             return await switchTab(cmd);
         case BC.RELOAD:

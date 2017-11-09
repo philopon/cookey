@@ -1,5 +1,8 @@
 blurFocus = true
 
+[ignore]
+"^https?://github.com.*$" = ["j", "k"]
+
 [key.l]
 type = "switch-tab"
 direction = "right"

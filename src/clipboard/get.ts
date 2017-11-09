@@ -14,7 +14,7 @@ const callback = () => {
 
 button.addEventListener("click", callback);
 
-export default function get_clipboard(): string {
+export default function getClipboard(): string {
     button.click();
     return textarea.textContent || "";
 }

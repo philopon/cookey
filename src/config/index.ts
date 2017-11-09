@@ -1,4 +1,4 @@
-import { AllCommands } from "./command";
+import { AllCommands } from "../command";
 
 export interface KeyConfig {
     [key: string]: AllCommands;
@@ -7,4 +7,5 @@ export interface KeyConfig {
 export interface Config {
     key: KeyConfig;
     blurFocus: boolean;
+    ignore: { [key: string]: string[] };
 }

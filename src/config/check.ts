@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as toml from "toml";
 import * as Ajv from "ajv";
-import schema from ".";
+import schema from "./schema";
 
 function main(path?: string) {
     if (!path) {

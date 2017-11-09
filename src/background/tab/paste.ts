@@ -1,9 +1,9 @@
 import { NewTabOptions, PasteOptions } from "../../command/background";
-import get_clipboard from "../../clipboard/get";
+import getClipboard from "../../clipboard/get";
 import newTab from "./new";
 
 export default async function paste(args: PasteOptions): Promise<void> {
-    const address = get_clipboard();
+    const address = getClipboard();
     if (args.newTab) {
         const opts: NewTabOptions = Object.assign({}, args, { address });
         await newTab(opts);

@@ -27,7 +27,7 @@ export class Tree<T> {
 
     static compile<T>(config: { [key: string]: T }): Tree<T> {
         const tree = new Tree<T>();
-        for (const key in config) {
+        for (const key of Object.keys(config)) {
             const keys = parseKey(key);
             tree.add(keys, config[key]);
         }
@@ -53,7 +53,7 @@ const shiftable = new Set([
     " ",
 ]);
 
-function parseKey(key: string): string[] {
+export function parseKey(key: string): string[] {
     return key.split(/\s+/).map(k => {
         const modKey = k.split("-");
         const mod = new Set<string>();

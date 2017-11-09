@@ -1,4 +1,4 @@
-export default function set_clipboard(value: string) {
+export default function setClipboard(value: string) {
     const body = document.body;
     const input = document.createElement("input");
     const button = document.createElement("button");

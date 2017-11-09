@@ -8,9 +8,10 @@ import { KeyFeeder, isModifierKey } from "../key";
 
 import { scrollBy, scrollTo } from "./scroll";
 import historyGo from "./history";
-import set_clipboard from "../clipboard/set";
+import setClipboard from "../clipboard/set";
 
 let keyFeeder: KeyFeeder;
+let ignores: Array<{ pattern: RegExp; keys: string[][] }> = [];
 
 async function loadConfig(reload: boolean = false): Promise<void> {
     if (!reload && keyFeeder) {
@@ -21,6 +22,38 @@ async function loadConfig(reload: boolean = false): Promise<void> {
     );
 
     keyFeeder = new KeyFeeder(config.key);
+    ignores = [];
+    for (const key of Object.keys(config.ignore || {})) {
+        ignores.push({ pattern: new RegExp(key), keys: config.ignore[key] });
+    }
+}
+
+function checkEqualKey(a: string[], b: string[]): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function checkIgnore(feeded: string[]): boolean {
+    const url = location.href;
+    for (const { pattern, keys } of ignores) {
+        if (pattern.test(url)) {
+            for (const key of keys) {
+                if (checkEqualKey(feeded, key)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    return false;
 }
 
 async function handleKeydown(event: KeyboardEvent): Promise<void> {
@@ -28,6 +61,7 @@ async function handleKeydown(event: KeyboardEvent): Promise<void> {
         loadConfig().then(() => handleKeydown(event));
         return;
     }
+
     const activeNode = document.activeElement;
     if (isModifierKey(event.key)) {
         return;
@@ -37,9 +71,12 @@ async function handleKeydown(event: KeyboardEvent): Promise<void> {
         return;
     }
 
-    const [cmd, _feeded] = keyFeeder.feed(event);
+    const [cmd, feeded] = keyFeeder.feed(event);
     if (cmd === true || cmd === false) {
     } else {
+        if (checkIgnore(feeded)) {
+            return;
+        }
         event.preventDefault();
         event.stopImmediatePropagation();
         await dispatchCommand(cmd);
@@ -74,6 +111,6 @@ async function dispatchCommand(command: AllCommands): Promise<C2B.Messages | voi
 async function dispatchResponse(response: B2C.Responses): Promise<void> {
     switch (response.type) {
         case B2C.SET_CLIPBOARD:
-            return set_clipboard(response.value);
+            return setClipboard(response.value);
     }
 }
