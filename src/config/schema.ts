@@ -71,7 +71,7 @@ const scrollBy = jobject({
 
 const newTab = jobject({
     type: jenum(BC.NEW_TAB),
-    address: jstring(),
+    url: jstring(),
     background: jboolean(),
     position: jenum(Dir.FIRST, Dir.LAST, Dir.RIGHT, Dir.LEFT),
 });
@@ -99,12 +99,15 @@ const pasteCur = jobject({
     newTab: jboolean(false),
 });
 
-const pasteNew = jobject({
-    type: jenum(BC.PASTE),
-    newTab: jboolean(true),
-    background: jboolean(),
-    position: jenum(Dir.FIRST, Dir.LAST, Dir.RIGHT, Dir.LEFT),
-});
+const pasteNew = jobject(
+    {
+        type: jenum(BC.PASTE),
+        newTab: jboolean(true),
+        background: jboolean(),
+        position: jenum(Dir.FIRST, Dir.LAST, Dir.RIGHT, Dir.LEFT),
+    },
+    ["newTab"]
+);
 
 const goUp = jobject({
     type: jenum(BC.GO_UP),
@@ -140,7 +143,7 @@ const schema: Schema = {
             patternProperties: {
                 ".*": {
                     required: ["type"],
-                    oneOf: [
+                    anyOf: [
                         switchTab,
                         reload,
                         scrollBy,

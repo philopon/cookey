@@ -3,13 +3,14 @@ import { LEFT, RIGHT, FIRST, LAST } from "../../command/direction";
 import { exhaustiveCheck } from "../../utils";
 
 export default async function openPage({
-    address,
+    url,
     background,
     position,
 }: NewTabOptions): Promise<void> {
-    const options: browser.tabs.CreateProperties = { url: address, active: !background };
+    const options: browser.tabs.CreateProperties = { url, active: !background };
     switch (position) {
         case LAST:
+        case undefined:
             break;
         case FIRST:
             options.index = 0;

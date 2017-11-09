@@ -8,7 +8,7 @@ export default async function switchTab({ direction, cycle }: SwitchTabOptions):
         browser.tabs.query({}),
     ]);
     const dc = direction === LEFT ? -1 : 1;
-    const idx = cycle
+    const idx = (cycle === undefined ? true : cycle)
         ? euclideanMod(active.index + dc, tabs.length)
         : clip(active.index + dc, 0, tabs.length);
 

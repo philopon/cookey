@@ -4,7 +4,7 @@ export const SWITCH_TAB = "switch-tab";
 
 export interface SwitchTabOptions {
     direction: Dir.LR;
-    cycle: boolean;
+    cycle?: boolean;
 }
 
 export interface SwitchTab extends SwitchTabOptions {
@@ -14,7 +14,7 @@ export interface SwitchTab extends SwitchTabOptions {
 export const RELOAD = "reload";
 
 export interface ReloadOptions {
-    bypassCache: boolean;
+    bypassCache?: boolean;
 }
 
 export interface Reload extends ReloadOptions {
@@ -24,9 +24,9 @@ export interface Reload extends ReloadOptions {
 export const NEW_TAB = "new-tab";
 
 export interface NewTabOptions {
-    address: string;
-    background: boolean;
-    position: typeof Dir.LEFT | typeof Dir.RIGHT | typeof Dir.LAST | typeof Dir.FIRST;
+    url?: string;
+    background?: boolean;
+    position?: typeof Dir.LEFT | typeof Dir.RIGHT | typeof Dir.LAST | typeof Dir.FIRST;
 }
 
 export interface NewTab extends NewTabOptions {
@@ -36,8 +36,8 @@ export interface NewTab extends NewTabOptions {
 export const CLOSE_TAB = "close-tab";
 
 export interface CloseTabOptions {
-    dontCloseLastTab: boolean;
-    dontClosePinnedTab: boolean;
+    dontCloseLastTab?: boolean;
+    dontClosePinnedTab?: boolean;
 }
 
 export interface CloseTab extends CloseTabOptions {
@@ -54,12 +54,12 @@ export interface Yank extends YankOptions {
 
 export const PASTE = "paste";
 
-interface NewTabPasteOptions extends Omit<NewTabOptions, "address"> {
+interface NewTabPasteOptions extends Omit<NewTabOptions, "url"> {
     newTab: true;
 }
 
 interface CurrentPasteOptions {
-    newTab: false;
+    newTab?: false;
 }
 
 export type PasteOptions = NewTabPasteOptions | CurrentPasteOptions;
@@ -69,7 +69,7 @@ export type Paste = PasteOptions & { type: typeof PASTE };
 export const GO_UP = "go-up";
 
 export interface GoUpOptions {
-    top: boolean;
+    top?: boolean;
 }
 
 export interface GoUp extends GoUpOptions {

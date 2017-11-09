@@ -3,8 +3,8 @@ import * as Dir from "./direction";
 export const SCROLL_BY = "scroll-by";
 
 export interface ScrollByOptions {
-    amount: number;
-    direction: typeof Dir.HORIZONTAL | typeof Dir.VERTICAL;
+    amount?: number;
+    direction?: typeof Dir.HORIZONTAL | typeof Dir.VERTICAL;
 }
 
 export interface ScrollBy extends ScrollByOptions {
