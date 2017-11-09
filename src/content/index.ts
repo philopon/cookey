@@ -58,7 +58,10 @@ function checkIgnore(feeded: string[]): boolean {
 
 async function handleKeydown(event: KeyboardEvent): Promise<void> {
     if (!keyFeeder) {
-        loadConfig().then(() => handleKeydown(event));
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        await loadConfig();
+        event.target.dispatchEvent(event);
         return;
     }
 
@@ -72,14 +75,15 @@ async function handleKeydown(event: KeyboardEvent): Promise<void> {
     }
 
     const [cmd, feeded] = keyFeeder.feed(event);
-    if (cmd === true || cmd === false) {
-    } else {
+    if (cmd !== false) {
         if (checkIgnore(feeded)) {
             return;
         }
         event.preventDefault();
         event.stopImmediatePropagation();
-        await dispatchCommand(cmd);
+        if (cmd !== true) {
+            await dispatchCommand(cmd);
+        }
     }
 }
 
