@@ -1,4 +1,23 @@
+function saveRanges(): Range[] {
+    const ranges: Range[] = [];
+    const selection = window.getSelection();
+    for (let i = 0; i < selection.rangeCount; i++) {
+        ranges.push(selection.getRangeAt(i));
+    }
+    return ranges;
+}
+
+function restoreRanges(ranges: Range[]): void {
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    for (const range of ranges) {
+        selection.addRange(range);
+    }
+}
+
 export default function setClipboard(value: string) {
+    const ranges = saveRanges();
+
     const body = document.body;
     const input = document.createElement("input");
     const button = document.createElement("button");
@@ -21,4 +40,6 @@ export default function setClipboard(value: string) {
 
     body.removeChild(input);
     body.removeChild(button);
+
+    restoreRanges(ranges);
 }
