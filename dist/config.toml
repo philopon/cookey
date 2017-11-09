@@ -89,3 +89,6 @@ amount = -1
 [key.L]
 type = "history-go"
 amount = 1
+
+[key.u]
+type = 'restore-tab'

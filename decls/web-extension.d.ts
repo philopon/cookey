@@ -146,4 +146,22 @@ declare namespace browser {
         ): Promise<FindResult & RectDataResult>;
         function find(query: string, options: FindOptions): Promise<FindResult>;
     }
+
+    namespace sessions {
+        export interface SessionTab extends tabs.Tab {
+            sessionId: string;
+        }
+
+        export interface Session {
+            lastModified: number;
+            tab: SessionTab;
+        }
+
+        export interface Filter {
+            maxResults?: number;
+        }
+        function getRecentlyClosed(filter: Filter): Promise<Session[]>;
+
+        function restore(sessionId: string): Promise<Session>;
+    }
 }

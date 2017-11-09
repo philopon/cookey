@@ -12,6 +12,7 @@ import reload from "./reload";
 import yank from "./tab/yank";
 import paste from "./tab/paste";
 import goUp from "./goUp";
+import restoreTab from "./tab/restore";
 
 import toml from "toml";
 
@@ -63,6 +64,8 @@ async function dispatchCommand(
             return await paste(cmd);
         case BC.GO_UP:
             return await goUp(cmd);
+        case BC.RESTORE_TAB:
+            return await restoreTab(cmd);
         default:
             exhaustiveCheck(cmd);
             return cmd;

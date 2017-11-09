@@ -3,9 +3,9 @@
     "name": "cookey",
     "version": "0.1.0",
     "applications": {
-      "gecko": {
-        "id": "philopon.dependence@gmail.com"
-      }
+        "gecko": {
+            "id": "philopon.dependence@gmail.com"
+        }
     },
 
     "description": "Adds a red border to all webpages matching mozilla.org.",
@@ -24,5 +24,13 @@
         "scripts": ["js/background.js"]
     },
 
-    "permissions": ["tabs", "find", "storage", "clipboardWrite", "clipboardRead", "<all_urls>"]
+    "permissions": [
+        "tabs",
+        "find",
+        "storage",
+        "clipboardWrite",
+        "clipboardRead",
+        "sessions",
+        "<all_urls>"
+    ]
 }

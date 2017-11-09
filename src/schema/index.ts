@@ -107,6 +107,8 @@ const historyGo = jobject(
     ["amount"]
 );
 
+const restoreTab = jobject({ type: jenum(BC.RESTORE_TAB) });
+
 const schema: Schema = {
     $schema: "http://json-schema.org/draft-06/schema#",
     type: "object",
@@ -131,6 +133,7 @@ const schema: Schema = {
                         pasteNew,
                         goUp,
                         historyGo,
+                        restoreTab,
                     ],
                 },
             },

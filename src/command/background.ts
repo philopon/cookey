@@ -76,4 +76,12 @@ export interface GoUp extends GoUpOptions {
     type: typeof GO_UP;
 }
 
-export type Commands = SwitchTab | Reload | NewTab | CloseTab | Yank | Paste | GoUp;
+export const RESTORE_TAB = "restore-tab";
+
+export interface RestoreTabOptions {}
+
+export interface RestoreTab extends RestoreTabOptions {
+    type: typeof RESTORE_TAB;
+}
+
+export type Commands = SwitchTab | Reload | NewTab | CloseTab | Yank | Paste | GoUp | RestoreTab;
