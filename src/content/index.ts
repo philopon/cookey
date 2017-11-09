@@ -46,7 +46,7 @@ async function handleKeydown(event: KeyboardEvent): Promise<void> {
     }
 }
 
-window.addEventListener("keydown", handleKeydown);
+window.addEventListener("keydown", handleKeydown, true);
 
 async function dispatchContentCommand(command: CC.Commands): Promise<C2B.Messages | void> {
     switch (command.type) {
