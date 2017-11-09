@@ -2,8 +2,8 @@ import * as BC from "../command/background";
 import { AllCommands } from "../command";
 import { exhaustiveCheck } from "../utils";
 import { Tree } from "../key";
-import * as B2C from "../message/backend-to-content";
-import * as C2B from "../message/content-to-backend";
+import * as B2C from "../message/background-to-content";
+import * as C2B from "../message/content-to-background";
 
 import switchTab from "./tab/switch";
 import newTab from "./tab/new";

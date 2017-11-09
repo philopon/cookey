@@ -1,5 +1,5 @@
-import * as C2B from "../message/content-to-backend";
-import * as B2C from "../message/backend-to-content";
+import * as C2B from "../message/content-to-background";
+import * as B2C from "../message/background-to-content";
 import { AllCommands } from "../command";
 import * as CC from "../command/content";
 import * as BC from "../command/background";
@@ -8,7 +8,7 @@ import { KeyFeeder, isModifierKey } from "../key";
 
 import { scrollBy, scrollTo } from "./scroll";
 import historyGo from "./history";
-import set_clipboard from "../set_clipboard";
+import set_clipboard from "../clipboard/set";
 
 let keyFeeder: KeyFeeder;
 

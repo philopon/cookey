@@ -1,5 +1,5 @@
 import { NewTabOptions, PasteOptions } from "../../command/background";
-import get_clipboard from "../get_clipboard";
+import get_clipboard from "../../clipboard/get";
 import newTab from "./new";
 
 export default async function paste(args: PasteOptions): Promise<void> {
