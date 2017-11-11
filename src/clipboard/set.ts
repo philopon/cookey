@@ -15,7 +15,7 @@ function restoreRanges(ranges: Range[]): void {
     }
 }
 
-export default function setClipboard(value: string) {
+export default function setClipboard(value: string): void {
     const ranges = saveRanges();
 
     const body = document.body;
