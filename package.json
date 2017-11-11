@@ -19,7 +19,7 @@
         "web-ext": "~2.2.2"
     },
     "scripts": {
-        "build": "run-p build:bundle",
+        "build": "run-p build:*",
         "build:bundle": "rollup -c",
         "lint": "web-ext lint -s dist",
         "dev": "run-p dev:*",

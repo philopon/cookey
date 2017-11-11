@@ -10,6 +10,10 @@
 
     "description": "Adds a red border to all webpages matching mozilla.org.",
 
+    "icons": {
+        "48": "icons/icon-48.png"
+    },
+
     "content_scripts": [
         {
             "all_frames": true,
@@ -19,6 +23,11 @@
             "run_at": "document_start"
         }
     ],
+
+    "browser_action": {
+        "default_icon": "icons/icon-32.png",
+        "default_title": "cookey"
+    },
 
     "background": {
         "scripts": ["js/background.js"]
