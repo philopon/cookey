@@ -6,6 +6,7 @@ export const SEND_CONFIG = "SEND_CONFIG";
 export interface SendConfigPayload {
     key: ITree<AllCommands>;
     ignore: { [key: string]: string[][] };
+    blurFocus: boolean;
 }
 
 export interface SendConfig extends SendConfigPayload {
@@ -30,4 +31,4 @@ export function SetClipboard({ value }: SetClipboardOptions): SetClipboard {
     return { type: SET_CLIPBOARD, value };
 }
 
-export type Responses = SetClipboard;
+export type Messages = SendConfig | SetClipboard;

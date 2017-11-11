@@ -49,13 +49,11 @@ async function loadConfig(reload: boolean = false): Promise<void> {
     }
 }
 
-async function dispatchCommand(
-    cmd: BC.Commands | C2B.Messages
-): Promise<B2C.Responses | B2C.SendConfig | void> {
+async function dispatch(cmd: BC.Commands | C2B.Messages): Promise<B2C.Messages | void> {
     switch (cmd.type) {
         case C2B.PULL_CONFIG:
             await loadConfig();
-            return B2C.SendConfig({ key: keyConfig, ignore });
+            return B2C.SendConfig({ key: keyConfig, ignore, blurFocus: doBlurFocus });
         case BC.SWITCH_TAB:
             return await switchTab(cmd);
         case BC.RELOAD:
@@ -78,27 +76,4 @@ async function dispatchCommand(
     }
 }
 
-async function blurFocus(id: number): Promise<void> {
-    await browser.tabs.executeScript(id, {
-        allFrames: true,
-        matchAboutBlank: true,
-        runAt: "document_start",
-        file: "/js/blur-focus.js",
-    });
-}
-
-browser.tabs.onUpdated.addListener(async (tabId, event) => {
-    switch (event.status) {
-        case "complete":
-        case "loading":
-            if (doBlurFocus) {
-                await loadConfig();
-                return await blurFocus(tabId);
-            }
-    }
-});
-
-browser.runtime.onMessage.addListener<
-    C2B.Messages | BC.Commands,
-    B2C.Responses | B2C.SendConfig | void
->(dispatchCommand);
+browser.runtime.onMessage.addListener<C2B.Messages | BC.Commands, B2C.Messages | void>(dispatch);
