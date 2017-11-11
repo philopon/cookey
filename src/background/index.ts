@@ -12,7 +12,7 @@ import closeTab from "./tab/close";
 import reload from "./reload";
 import yank from "./tab/yank";
 import paste from "./tab/paste";
-import goUp from "./goUp";
+import goUp from "./go-up";
 import restoreTab from "./tab/restore";
 
 import toml from "toml";

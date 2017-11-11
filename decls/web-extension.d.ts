@@ -47,7 +47,7 @@ declare namespace browser {
         }
         function reload(id: number, props: ReloadProperties): Promise<undefined>;
 
-        function sendMessage<T>(id: number, message: T): Promise<any>;
+        function sendMessage<T, R>(id: number, message: T): Promise<R>;
 
         interface CreateProperties {
             active?: boolean;
@@ -120,9 +120,16 @@ declare namespace browser {
             rangeData: RangeData[];
         }
 
+        interface Rect {
+            bottom: number;
+            left: number;
+            right: number;
+            top: number;
+        }
+
         interface RectData {
             rectsAndTexts: {
-                rectList: Array<{ bottom: number; left: number; right: number; top: number }>;
+                rectList: Rect[];
                 textList: string[];
                 text: string;
             };
