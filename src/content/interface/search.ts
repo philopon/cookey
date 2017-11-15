@@ -20,37 +20,40 @@ export default class Searchbox {
         iframe.style.zIndex = "9999";
     }
 
-    onkeydown(event: KeyboardEvent) {
+    async onkeydown(event: KeyboardEvent): Promise<void> {
         const { key, ctrlKey, altKey, metaKey } = event;
         if (key === "Escape") {
             event.preventDefault();
             this.hide();
         } else if (!ctrlKey && !altKey && !metaKey && key === "Enter") {
             event.preventDefault();
-            browser.runtime.sendMessage(SubmitQuery(this.value));
+            await browser.runtime.sendMessage(SubmitQuery(this.value));
+            this.hide();
+        } else if (event.key === "Backspace" && this.value.length === 0) {
+            event.preventDefault();
+            await browser.runtime.sendMessage(SubmitQuery(""));
             this.hide();
         }
     }
 
-    onkeyup(_event: KeyboardEvent) {
+    onkeyup(_: KeyboardEvent): void {
         setTimeout(() => {
             const selection = getSelection();
             selection.removeAllRanges();
             this.prevent = true;
-            console.log("case sensitive:", this.caseSensitive);
-            windowFind(this.value, this.caseSensitive);
+            this.value.length > 0 && windowFind(this.value, this.caseSensitive);
             this.iframe.focus();
             this.prevent = false;
         });
     }
 
-    onpaste(event: ClipboardEvent) {
+    onpaste(event: ClipboardEvent): void {
         event.preventDefault();
         const value = event.clipboardData.getData("Text");
         this.value = value.split("\n").join(" ");
     }
 
-    onLoad(resolve: () => void) {
+    onLoad(resolve: () => void): void {
         const child = this.iframe.contentWindow.document;
         this.wrapper = child.body.querySelector(".wrapper") as HTMLDivElement;
         this.input = child.body.querySelector(".input") as HTMLDivElement;
@@ -73,7 +76,7 @@ export default class Searchbox {
         });
     }
 
-    async show(value: string = "", caseSensitive: boolean = false) {
+    async show(value: string = "", caseSensitive: boolean = false): Promise<void> {
         if (!this.loaded) {
             await this.load();
         }
@@ -84,7 +87,8 @@ export default class Searchbox {
         this.iframe.contentWindow.document.execCommand("selectAll", false, null);
     }
 
-    hide() {
+    hide(): void {
+        this.iframe.blur();
         this.iframe.style.visibility = "hidden";
     }
 
