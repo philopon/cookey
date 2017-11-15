@@ -10,6 +10,7 @@ import { scrollBy, scrollTo } from "./scroll";
 import historyGo from "./history";
 import setClipboard from "../clipboard/set";
 import BlurFocus from "../blur-focus";
+import { startSearch, searchJump } from "./search";
 
 let keyFeeder: KeyFeeder;
 let ignores: Array<{ pattern: RegExp; keys: string[][] }> = [];
@@ -125,6 +126,10 @@ async function dispatch(
             return setConfig(cmd);
         case B2C.SET_CLIPBOARD:
             return setClipboard(cmd.value);
+        case B2C.START_SEARCH_MSG:
+            return startSearch(cmd);
+        case B2C.SEARCH_JUMP_MSG:
+            return searchJump(cmd);
         default:
             exhaustiveCheck(cmd);
             return cmd;

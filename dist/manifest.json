@@ -41,5 +41,6 @@
         "clipboardRead",
         "sessions",
         "<all_urls>"
-    ]
+    ],
+    "web_accessible_resources": ["html/search-box.html"]
 }

@@ -124,6 +124,17 @@ const historyGo = jobject(
 
 const restoreTab = jobject({ type: jenum(BC.RESTORE_TAB) });
 
+const startSearch = jobject({
+    type: jenum(BC.START_SEARCH),
+    caseSensitive: jboolean(),
+});
+
+const searchJump = jobject({
+    type: jenum(BC.SEARCH_JUMP),
+    backward: jboolean(),
+    wrapAround: jboolean(),
+});
+
 const schema: Schema = {
     $schema: "http://json-schema.org/draft-06/schema#",
     type: "object",
@@ -156,6 +167,8 @@ const schema: Schema = {
                         goUp,
                         historyGo,
                         restoreTab,
+                        startSearch,
+                        searchJump,
                     ],
                 },
             },

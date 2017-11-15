@@ -91,3 +91,16 @@ amount = 1
 
 [key.u]
 type = 'restore-tab'
+
+[key."/"]
+type = 'start-search'
+# caseSensitive = false
+
+[key.n]
+type = 'search-jump'
+# wrapAround = true
+
+[key.N]
+type = 'search-jump'
+backward = true
+# wrapAround = true

@@ -84,4 +84,35 @@ export interface RestoreTab extends RestoreTabOptions {
     type: typeof RESTORE_TAB;
 }
 
-export type Commands = SwitchTab | Reload | NewTab | CloseTab | Yank | Paste | GoUp | RestoreTab;
+export const START_SEARCH = "start-search";
+
+export interface StartSearchOptions {
+    caseSensitive?: boolean;
+}
+
+export interface StartSearch extends StartSearchOptions {
+    type: typeof START_SEARCH;
+}
+
+export const SEARCH_JUMP = "search-jump";
+
+export interface SearchJumpOptions {
+    wrapAround?: boolean;
+    backward?: boolean;
+}
+
+export interface SearchJump extends SearchJumpOptions {
+    type: typeof SEARCH_JUMP;
+}
+
+export type Commands =
+    | SwitchTab
+    | Reload
+    | NewTab
+    | CloseTab
+    | Yank
+    | Paste
+    | GoUp
+    | RestoreTab
+    | StartSearch
+    | SearchJump;

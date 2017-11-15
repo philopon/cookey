@@ -7,5 +7,15 @@ export interface PullConfig {
 export function PullConfig(): PullConfig {
     return { type: PULL_CONFIG };
 }
+export const SUBMIT_QUERY = "SUBMIT_QUERY";
 
-export type Messages = PullConfig;
+export interface SubmitQuery {
+    type: typeof SUBMIT_QUERY;
+    query: string;
+}
+
+export function SubmitQuery(query: string): SubmitQuery {
+    return { type: SUBMIT_QUERY, query };
+}
+
+export type Messages = PullConfig | SubmitQuery;

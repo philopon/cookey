@@ -14,6 +14,7 @@ import yank from "./tab/yank";
 import paste from "./tab/paste";
 import goUp from "./go-up";
 import restoreTab from "./tab/restore";
+import { setQuery, startSearch, searchJump } from "./search";
 
 import toml from "toml";
 
@@ -54,6 +55,8 @@ async function dispatch(cmd: BC.Commands | C2B.Messages): Promise<B2C.Messages |
         case C2B.PULL_CONFIG:
             await loadConfig();
             return B2C.SendConfig({ key: keyConfig, ignore, blurFocus: doBlurFocus });
+        case C2B.SUBMIT_QUERY:
+            return await setQuery(cmd);
         case BC.SWITCH_TAB:
             return await switchTab(cmd);
         case BC.RELOAD:
@@ -70,6 +73,10 @@ async function dispatch(cmd: BC.Commands | C2B.Messages): Promise<B2C.Messages |
             return await goUp(cmd);
         case BC.RESTORE_TAB:
             return await restoreTab(cmd);
+        case BC.START_SEARCH:
+            return await startSearch(cmd);
+        case BC.SEARCH_JUMP:
+            return await searchJump(cmd);
         default:
             exhaustiveCheck(cmd);
             return cmd;

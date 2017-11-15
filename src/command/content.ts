@@ -32,9 +32,3 @@ export interface HistoryGo extends HistoryGoOptions {
 }
 
 export type Commands = ScrollBy | ScrollTo | HistoryGo;
-
-const commands = new Set([SCROLL_BY, SCROLL_TO, HISTORY_GO]);
-
-export function isContentCommand(cmd: { type: string }): cmd is Commands {
-    return commands.has(cmd.type);
-}

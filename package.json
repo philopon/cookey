@@ -2,12 +2,15 @@
     "private": true,
     "devDependencies": {
         "ajv": "~5.3.0",
+        "aurel": "0.3.2",
         "base-x": "~3.0.2",
         "cssnano": "~3.10.0",
+        "material-design-color": "~2.3.2",
         "node-sass": "~4.6.0",
         "npm-run-all": "~4.1.2",
         "postcss-modules": "~1.1.0",
         "prettier": "~1.8.1",
+        "pug-cli": "~1.0.0-alpha6",
         "rimraf": "~2.6.2",
         "rollup": "~0.50.1",
         "rollup-plugin-commonjs": "~8.2.6",
@@ -21,10 +24,14 @@
     "scripts": {
         "build": "run-p build:*",
         "build:bundle": "rollup -c",
+        "build:html": "pug pug -o dist/html",
+        "build:css": "node-sass sass -o dist/css",
         "lint": "web-ext lint -s dist",
         "dev": "run-p dev:*",
         "dev:bundle": "run-s \"build:bundle -- -w\"",
+        "dev:html": "run-s \"build:html -- -w\"",
+        "dev:css": "aurel -w sass -s build:css",
         "dev:web-ext": "web-ext run -s dist --bc",
-        "clean": "rimraf js dist/js/ dist/css/ web-ext-artifacts"
+        "clean": "rimraf js dist/js/ dist/css/ dist/html/ web-ext-artifacts"
     }
 }
