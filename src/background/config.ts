@@ -31,7 +31,7 @@ export async function getDefaultConfigString(): Promise<string> {
 }
 
 export async function loadConfigString(): Promise<string> {
-    const { config } = await browser.storage.local.get<string>("config");
+    const { config } = await browser.storage.sync.get<string>("config");
     if (config === undefined) {
         return await getDefaultConfigString();
     }

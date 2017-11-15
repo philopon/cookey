@@ -23,7 +23,7 @@ import { ReloadConfig } from "./message/content-to-background";
     form.addEventListener("submit", async e => {
         e.preventDefault();
         const text = config.value || "";
-        await browser.storage.local.set({ config: text });
+        await browser.storage.sync.set({ config: text });
         await browser.runtime.sendMessage(ReloadConfig());
     });
 })();
