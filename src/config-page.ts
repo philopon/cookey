@@ -15,15 +15,27 @@ import { ReloadConfig } from "./message/content-to-background";
         throw Error("no form element");
     }
 
+    const save = async () => {
+        const text = config.value || "";
+        await browser.storage.sync.set({ config: text });
+        await browser.runtime.sendMessage(ReloadConfig());
+    };
+
     config.value = await loadConfigString();
+    config.addEventListener("keypress", event => {
+        const { ctrlKey, metaKey, key } = event;
+        if ((ctrlKey || metaKey) && key === "s") {
+            event.preventDefault();
+            save();
+        }
+    });
+
     reset.addEventListener("click", async () => {
         config.value = await getDefaultConfigString();
     });
 
     form.addEventListener("submit", async e => {
         e.preventDefault();
-        const text = config.value || "";
-        await browser.storage.sync.set({ config: text });
-        await browser.runtime.sendMessage(ReloadConfig());
+        save();
     });
 })();
