@@ -18,4 +18,14 @@ export function SubmitQuery(query: string): SubmitQuery {
     return { type: SUBMIT_QUERY, query };
 }
 
-export type Messages = PullConfig | SubmitQuery;
+export const RELOAD_CONFIG = "RELOAD_CONFIG";
+
+export interface ReloadConfig {
+    type: typeof RELOAD_CONFIG;
+}
+
+export function ReloadConfig(): ReloadConfig {
+    return { type: RELOAD_CONFIG };
+}
+
+export type Messages = PullConfig | SubmitQuery | ReloadConfig;

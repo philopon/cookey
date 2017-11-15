@@ -1,8 +1,5 @@
 import * as BC from "../command/background";
-import { AllCommands } from "../command";
 import { exhaustiveCheck } from "../utils";
-import { Tree, parseKey } from "../key";
-import { Config } from "../config";
 import * as B2C from "../message/background-to-content";
 import * as C2B from "../message/content-to-background";
 
@@ -15,48 +12,24 @@ import paste from "./tab/paste";
 import goUp from "./go-up";
 import restoreTab from "./tab/restore";
 import { setQuery, startSearch, searchJump } from "./search";
+import { ConfigManager } from "./config";
 
-import toml from "toml";
-
-let keyConfig: Tree<AllCommands>;
-let doBlurFocus: boolean = false;
-let ignore: { [key: string]: string[][] };
-
-async function getDefaultConfig(): Promise<string> {
-    const response = await fetch(browser.runtime.getURL("config.toml"));
-    return await response.text();
-}
-
-async function parseConfig(config: string): Promise<Config> {
-    return toml.parse(config);
-}
-
-(async function() {
-    const config = await getDefaultConfig();
-    await browser.storage.local.set({ config });
-})();
-
-async function loadConfig(reload: boolean = false): Promise<void> {
-    if (!reload && keyConfig) {
-        return;
-    }
-    const { config } = await browser.storage.local.get<string>("config");
-    const parsed = await parseConfig(config);
-    doBlurFocus = parsed.blurFocus;
-    keyConfig = Tree.compile(parsed.key);
-    ignore = {};
-    for (const key of Object.keys(parsed.ignore || {})) {
-        ignore[key] = parsed.ignore[key].map(k => parseKey(k));
-    }
-}
+const config = new ConfigManager();
 
 async function dispatch(cmd: BC.Commands | C2B.Messages): Promise<B2C.Messages | void> {
     switch (cmd.type) {
         case C2B.PULL_CONFIG:
-            await loadConfig();
-            return B2C.SendConfig({ key: keyConfig, ignore, blurFocus: doBlurFocus });
+            const key = await config.load();
+            return B2C.SendConfig({
+                key,
+                ignore: config.ignore,
+                blurFocus: config.blurFocus,
+            });
         case C2B.SUBMIT_QUERY:
             return await setQuery(cmd);
+        case C2B.RELOAD_CONFIG:
+            config.load(true);
+            return;
         case BC.SWITCH_TAB:
             return await switchTab(cmd);
         case BC.RELOAD:

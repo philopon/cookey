@@ -68,4 +68,5 @@ export default [
     makeEntry("background/index.ts", "background.js"),
     makeEntry("content/index.ts", "content.js"),
     makeEntry("blur-focus/index.ts", "blur-focus.js"),
+    makeEntry("config-page.ts", "config-page.js"),
 ];

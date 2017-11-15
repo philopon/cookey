@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
     "name": "cookey",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "applications": {
         "gecko": {
-          "id": "{626517eb-4561-45ef-bc25-484a9e641dbe}"
+            "id": "{626517eb-4561-45ef-bc25-484a9e641dbe}"
         }
     },
 
@@ -27,6 +27,11 @@
     "browser_action": {
         "default_icon": "icons/icon-32.png",
         "default_title": "cookey"
+    },
+
+    "options_ui": {
+        "page": "html/config.html",
+        "browser_style": true
     },
 
     "background": {

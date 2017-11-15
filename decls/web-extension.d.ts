@@ -90,7 +90,7 @@ declare namespace browser {
 
     namespace storage {
         namespace local {
-            export function get<T>(key: string): Promise<{ [key: string]: T }>;
+            export function get<T>(key?: string | null): Promise<{ [key: string]: T }>;
             export function set<T extends { [key: string]: any }>(v: T): Promise<null>;
         }
     }
