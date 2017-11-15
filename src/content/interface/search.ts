@@ -5,9 +5,9 @@ export default class Searchbox {
     private iframe: HTMLIFrameElement;
     private wrapper: HTMLDivElement;
     private input: HTMLDivElement;
-    private resolves: Array<() => void> = [];
+
+    private loaded: boolean = false;
     private prevent: boolean = false;
-    private valueToSet: string = "";
     private caseSensitive: boolean = false;
 
     constructor() {
@@ -18,7 +18,6 @@ export default class Searchbox {
         iframe.style.right = "0";
         iframe.style.width = "100%";
         iframe.style.zIndex = "9999";
-        iframe.addEventListener("load", () => this.onLoad());
     }
 
     onkeydown(event: KeyboardEvent) {
@@ -38,54 +37,55 @@ export default class Searchbox {
             const selection = getSelection();
             selection.removeAllRanges();
             this.prevent = true;
+            console.log("case sensitive:", this.caseSensitive);
             windowFind(this.value, this.caseSensitive);
             this.iframe.focus();
             this.prevent = false;
         });
     }
 
-    onLoad() {
+    onpaste(event: ClipboardEvent) {
+        event.preventDefault();
+        const value = event.clipboardData.getData("Text");
+        this.value = value.split("\n").join(" ");
+    }
+
+    onLoad(resolve: () => void) {
         const child = this.iframe.contentWindow.document;
         this.wrapper = child.body.querySelector(".wrapper") as HTMLDivElement;
         this.input = child.body.querySelector(".input") as HTMLDivElement;
-        this.input.innerText = this.valueToSet;
+
         this.input.addEventListener("blur", () => this.prevent || this.hide());
         this.input.addEventListener("keydown", event => this.onkeydown(event));
         this.input.addEventListener("keyup", event => this.onkeyup(event));
-
-        this.input.addEventListener("paste", event => {
-            event.preventDefault();
-            const value = event.clipboardData.getData("Text");
-            this.value = value.split("\n").join(" ");
-        });
+        this.input.addEventListener("paste", event => this.onpaste(event));
 
         this.iframe.style.height = `${this.wrapper.clientHeight + 1}px`;
-        this.input.focus();
-        while (true) {
-            const resolve = this.resolves.pop();
-            if (resolve === undefined) {
-                break;
-            }
-            resolve();
-        }
-        child.execCommand("selectAll", false, null);
+        resolve();
     }
 
-    show(value: string = "", caseSensitive: boolean = false) {
-        this.caseSensitive = caseSensitive;
+    load(): Promise<void> {
         return new Promise(async resolve => {
-            this.valueToSet = value;
             const html = await browser.runtime.getURL("html/search-box.html");
             this.iframe.src = html;
-            this.resolves.push(resolve);
+            this.iframe.addEventListener("load", () => this.onLoad(resolve));
             document.body.appendChild(this.iframe);
         });
     }
 
-    hide() {
-        if (this.iframe.parentNode) {
-            document.body.removeChild(this.iframe);
+    async show(value: string = "", caseSensitive: boolean = false) {
+        if (!this.loaded) {
+            await this.load();
         }
+        this.iframe.style.visibility = "visible";
+        this.caseSensitive = caseSensitive;
+        this.input.innerText = value;
+        this.input.focus();
+        this.iframe.contentWindow.document.execCommand("selectAll", false, null);
+    }
+
+    hide() {
+        this.iframe.style.visibility = "hidden";
     }
 
     set value(s: string) {
