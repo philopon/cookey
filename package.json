@@ -23,6 +23,7 @@
     },
     "scripts": {
         "build": "run-p build:*",
+        "sign": "web-ext -s dist sign --api-key=$(jq -r .key user.json) --api-secret=$(jq -r .secret user.json)",
         "build:bundle": "rollup -c",
         "build:html": "pug pug -o dist/html",
         "build:css": "node-sass sass -o dist/css",
