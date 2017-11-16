@@ -6,7 +6,7 @@ import * as BC from "../command/background";
 import { exhaustiveCheck } from "../utils";
 import { KeyFeeder, isModifierKey, checkEqualKey } from "../key";
 
-import { scrollBy, scrollTo } from "./scroll";
+import { Scroller } from "./scroll";
 import historyGo from "./history";
 import setClipboard from "../clipboard/set";
 import BlurFocus from "../blur-focus";
@@ -16,6 +16,7 @@ let keyFeeder: KeyFeeder;
 let ignores: Array<{ pattern: RegExp; keys: string[][] }> = [];
 
 const blurFocus = new BlurFocus();
+const scroller = new Scroller();
 
 loadConfig();
 
@@ -117,9 +118,9 @@ async function dispatch(
 ): Promise<BC.Commands | C2B.Messages | void> {
     switch (cmd.type) {
         case CC.SCROLL_BY:
-            return scrollBy(cmd);
+            return scroller.scrollBy(cmd);
         case CC.SCROLL_TO:
-            return scrollTo(cmd);
+            return scroller.scrollTo(cmd);
         case CC.HISTORY_GO:
             return historyGo(cmd);
         case B2C.SEND_CONFIG:
