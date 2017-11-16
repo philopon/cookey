@@ -1,0 +1,51 @@
+{
+    "manifest_version": 2,
+    "name": "cookey",
+    "version": "0.1.5",
+    "applications": {
+        "gecko": {
+            "id": "{626517eb-4561-45ef-bc25-484a9e641dbe}"
+        }
+    },
+
+    "description": "Adds a red border to all webpages matching mozilla.org.",
+
+    "icons": {
+        "48": "icons/icon-48.png"
+    },
+
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "match_about_blank": true,
+            "matches": ["<all_urls>"],
+            "js": ["js/content.js"],
+            "run_at": "document_start"
+        }
+    ],
+
+    "browser_action": {
+        "default_icon": "icons/icon-32.png",
+        "default_title": "cookey"
+    },
+
+    "options_ui": {
+        "page": "html/options.html",
+        "browser_style": true
+    },
+
+    "background": {
+        "scripts": ["js/background.js"]
+    },
+
+    "permissions": [
+        "tabs",
+        "find",
+        "storage",
+        "clipboardWrite",
+        "clipboardRead",
+        "sessions",
+        "<all_urls>"
+    ],
+    "web_accessible_resources": ["html/search-box.html"]
+}

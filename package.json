@@ -1,0 +1,41 @@
+{
+    "private": true,
+    "devDependencies": {
+        "aurel": "0.3.2",
+        "copyfiles": "~1.2.0",
+        "jsonschema": "~1.2.0",
+        "material-design-color": "~2.3.2",
+        "monaco-editor": "~0.10.1",
+        "node-sass": "~4.6.1",
+        "npm-run-all": "~4.1.2",
+        "prettier": "~1.8.2",
+        "pug-cli": "~1.0.0-alpha6",
+        "rimraf": "~2.6.2",
+        "rollup": "~0.50.1",
+        "rollup-plugin-commonjs": "~8.2.6",
+        "rollup-plugin-node-resolve": "~3.0.0",
+        "rollup-plugin-typescript": "~0.8.1",
+        "toml": "~2.3.3",
+        "typescript": "~2.6.1",
+        "url": "~0.11.0",
+        "web-ext": "~2.2.2"
+    },
+    "scripts": {
+        "build": "run-p build:*",
+        "sign":
+            "web-ext -s dist sign --api-key=$(jq -r .key user.json) --api-secret=$(jq -r .secret user.json)",
+        "build:bundle": "rollup -c",
+        "build:html": "pug pug -o dist/html",
+        "build:css": "node-sass sass -o dist/css",
+        "build:monaco":
+            "copyfiles -u 3 -e '**/?(language|basic-languages)/**' 'node_modules/monaco-editor/min/vs/**' dist/js",
+        "lint": "web-ext lint -s dist -i js/vs",
+        "dev": "run-p dev:*",
+        "dev:bundle": "run-s \"build:bundle -- -w\"",
+        "dev:html": "aurel -w pug -s build:html",
+        "dev:css": "aurel -w sass -s build:css",
+        "dev:monaco": "run-s \"build:monaco -- -w\"",
+        "dev:web-ext": "web-ext run -s dist --bc",
+        "clean": "rimraf js dist/js/ dist/css/ dist/html/ web-ext-artifacts"
+    }
+}
