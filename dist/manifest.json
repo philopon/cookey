@@ -30,7 +30,7 @@
     },
 
     "options_ui": {
-        "page": "html/config.html",
+        "page": "html/options.html",
         "browser_style": true
     },
 

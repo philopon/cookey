@@ -1,5 +1,5 @@
-import { getDefaultConfigString, loadConfigString } from "./background/config";
-import { ReloadConfig } from "./message/content-to-background";
+import { getDefaultConfigString, loadConfigString } from ".";
+import { ReloadConfig } from "../message/content-to-background";
 
 (async () => {
     const config = document.querySelector<HTMLTextAreaElement>(".config");

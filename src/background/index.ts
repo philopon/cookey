@@ -12,7 +12,7 @@ import paste from "./tab/paste";
 import goUp from "./go-up";
 import restoreTab from "./tab/restore";
 import { setQuery, startSearch, searchJump } from "./search";
-import { ConfigManager } from "./config";
+import { ConfigManager } from "../config";
 
 const config = new ConfigManager();
 
