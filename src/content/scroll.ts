@@ -1,9 +1,9 @@
-import { ScrollByOptions, ScrollToOptions } from "../command/content";
+import { ScrollBy, ScrollTo } from "../command/content";
 import { HORIZONTAL, TOP } from "../command/direction";
 
 const defaultAmount = 200;
 
-export function scrollBy({ direction, amount }: ScrollByOptions): void {
+export function scrollBy({ direction, amount }: Options<ScrollBy>): void {
     if (direction === HORIZONTAL) {
         window.scrollBy(amount || defaultAmount, 0);
     } else {
@@ -11,7 +11,7 @@ export function scrollBy({ direction, amount }: ScrollByOptions): void {
     }
 }
 
-export function scrollTo({ position }: ScrollToOptions): void {
+export function scrollTo({ position }: Options<ScrollTo>): void {
     if (position === TOP) {
         window.scrollTo(0, 0);
     } else {

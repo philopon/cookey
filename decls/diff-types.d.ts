@@ -6,3 +6,5 @@ type Omit<T, K extends keyof T> = Pick<T, DiffKey<keyof T, K>>;
 type Diff<T, U> = Omit<T, keyof U & keyof T>;
 
 type WeakDiff<T, U> = Diff<T, U> & { [K in (keyof U & keyof T)]?: T[K] };
+
+type Options<T extends { type: any }> = Omit<T, "type">;

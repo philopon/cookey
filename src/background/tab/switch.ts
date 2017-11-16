@@ -1,8 +1,8 @@
-import { SwitchTabOptions } from "../../command/background";
+import { SwitchTab } from "../../command/background";
 import { LEFT } from "../../command/direction";
 import { clip, euclideanMod } from "../../utils";
 
-export default async function switchTab({ direction, cycle }: SwitchTabOptions): Promise<void> {
+export default async function switchTab({ direction, cycle }: Options<SwitchTab>): Promise<void> {
     const [[active], tabs] = await Promise.all([
         browser.tabs.query({ active: true }),
         browser.tabs.query({}),

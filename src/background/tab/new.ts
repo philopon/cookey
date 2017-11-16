@@ -1,4 +1,4 @@
-import { NewTabOptions } from "../../command/background";
+import { NewTab } from "../../command/background";
 import { LEFT, RIGHT, FIRST, LAST } from "../../command/direction";
 import { exhaustiveCheck } from "../../utils";
 
@@ -6,7 +6,7 @@ export default async function openPage({
     url,
     background,
     position,
-}: NewTabOptions): Promise<void> {
+}: Options<NewTab>): Promise<void> {
     const options: browser.tabs.CreateProperties = { url, active: !background };
     switch (position) {
         case LAST:

@@ -1,5 +1,5 @@
-import { HistoryGoOptions } from "../command/content";
+import { HistoryGo } from "../command/content";
 
-export default function historyGo({ amount }: HistoryGoOptions): void {
+export default function historyGo({ amount }: Options<HistoryGo>): void {
     window.history.go(amount);
 }

@@ -1,9 +1,9 @@
-import { CloseTabOptions } from "../../command/background";
+import { CloseTab } from "../../command/background";
 
 export default async function removeTab({
     dontCloseLastTab,
     dontClosePinnedTab,
-}: CloseTabOptions): Promise<void> {
+}: Options<CloseTab>): Promise<void> {
     if (dontCloseLastTab) {
         const all = await browser.tabs.query({});
         if (all.length === 1) {

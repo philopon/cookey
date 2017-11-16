@@ -3,64 +3,52 @@ import { ITree } from "../key";
 
 export const SEND_CONFIG = "SEND_CONFIG";
 
-export interface SendConfigPayload {
+export interface SendConfig {
+    type: typeof SEND_CONFIG;
     key: ITree<AllCommands>;
     ignore: { [key: string]: string[][] };
     blurFocus: boolean;
 }
 
-export interface SendConfig extends SendConfigPayload {
-    type: typeof SEND_CONFIG;
-}
-
-export function SendConfig(args: SendConfigPayload): SendConfig {
+export function SendConfig(args: Options<SendConfig>): SendConfig {
     return { type: SEND_CONFIG, ...args };
 }
 
 export const SET_CLIPBOARD = "SET_CLIPBOARD";
 
-export interface SetClipboardOptions {
+export interface SetClipboard {
+    type: typeof SET_CLIPBOARD;
     value: string;
 }
 
-export interface SetClipboard extends SetClipboardOptions {
-    type: typeof SET_CLIPBOARD;
-}
-
-export function SetClipboard(args: SetClipboardOptions): SetClipboard {
+export function SetClipboard(args: Options<SetClipboard>): SetClipboard {
     return { type: SET_CLIPBOARD, ...args };
 }
 
-export const START_SEARCH_MSG = "START_SEARCH_MSG";
+export const START_SEARCH = "START_SEARCH";
 
-export interface StartSearchMsgOptions {
+export interface StartSearch {
+    type: typeof START_SEARCH;
     query: string;
     caseSensitive: boolean;
 }
 
-export interface StartSearchMsg extends StartSearchMsgOptions {
-    type: typeof START_SEARCH_MSG;
+export function StartSearch(args: Options<StartSearch>): StartSearch {
+    return { type: START_SEARCH, ...args };
 }
 
-export function StartSearchMsg(args: StartSearchMsgOptions): StartSearchMsg {
-    return { type: START_SEARCH_MSG, ...args };
-}
+export const SEARCH_JUMP = "SEARCH_JUMP";
 
-export const SEARCH_JUMP_MSG = "SEARCH_JUMP_MSG";
-
-export interface SearchJumpMsgOptions {
+export interface SearchJump {
+    type: typeof SEARCH_JUMP;
     query: string;
     backward: boolean;
     wrapAround: boolean;
     caseSensitive: boolean;
 }
 
-export interface SearchJumpMsg extends SearchJumpMsgOptions {
-    type: typeof SEARCH_JUMP_MSG;
+export function SearchJump(args: Options<SearchJump>): SearchJump {
+    return { type: SEARCH_JUMP, ...args };
 }
 
-export function SearchJumpMsg(args: SearchJumpMsgOptions): SearchJumpMsg {
-    return { type: SEARCH_JUMP_MSG, ...args };
-}
-
-export type Messages = SendConfig | SetClipboard | SearchJumpMsg | StartSearchMsg;
+export type Messages = SendConfig | SetClipboard | SearchJump | StartSearch;

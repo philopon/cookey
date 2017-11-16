@@ -19,7 +19,7 @@ const blurFocus = new BlurFocus();
 
 loadConfig();
 
-function setConfig(config: B2C.SendConfigPayload): void {
+function setConfig(config: B2C.SendConfig): void {
     keyFeeder = new KeyFeeder(config.key);
     ignores = [];
     for (const key of Object.keys(config.ignore || {})) {
@@ -126,9 +126,9 @@ async function dispatch(
             return setConfig(cmd);
         case B2C.SET_CLIPBOARD:
             return setClipboard(cmd.value);
-        case B2C.START_SEARCH_MSG:
+        case B2C.START_SEARCH:
             return startSearch(cmd);
-        case B2C.SEARCH_JUMP_MSG:
+        case B2C.SEARCH_JUMP:
             return searchJump(cmd);
         default:
             exhaustiveCheck(cmd);

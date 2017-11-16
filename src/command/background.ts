@@ -2,59 +2,45 @@ import * as Dir from "./direction";
 
 export const SWITCH_TAB = "switch-tab";
 
-export interface SwitchTabOptions {
+export interface SwitchTab {
+    type: typeof SWITCH_TAB;
     direction: Dir.LR;
     cycle?: boolean;
 }
 
-export interface SwitchTab extends SwitchTabOptions {
-    type: typeof SWITCH_TAB;
-}
-
 export const RELOAD = "reload";
 
-export interface ReloadOptions {
-    bypassCache?: boolean;
-}
-
-export interface Reload extends ReloadOptions {
+export interface Reload {
     type: typeof RELOAD;
+    bypassCache?: boolean;
 }
 
 export const NEW_TAB = "new-tab";
 
-export interface NewTabOptions {
+export interface NewTab {
+    type: typeof NEW_TAB;
     url?: string;
     background?: boolean;
     position?: typeof Dir.LEFT | typeof Dir.RIGHT | typeof Dir.LAST | typeof Dir.FIRST;
 }
 
-export interface NewTab extends NewTabOptions {
-    type: typeof NEW_TAB;
-}
-
 export const CLOSE_TAB = "close-tab";
 
-export interface CloseTabOptions {
+export interface CloseTab {
+    type: typeof CLOSE_TAB;
     dontCloseLastTab?: boolean;
     dontClosePinnedTab?: boolean;
 }
 
-export interface CloseTab extends CloseTabOptions {
-    type: typeof CLOSE_TAB;
-}
-
 export const YANK = "yank";
 
-export interface YankOptions {}
-
-export interface Yank extends YankOptions {
+export interface Yank {
     type: typeof YANK;
 }
 
 export const PASTE = "paste";
 
-interface NewTabPasteOptions extends Omit<NewTabOptions, "url"> {
+interface NewTabPasteOptions extends Omit<Options<NewTab>, "url"> {
     newTab: true;
 }
 
@@ -63,46 +49,34 @@ interface CurrentPasteOptions {
 }
 
 export type PasteOptions = NewTabPasteOptions | CurrentPasteOptions;
-
 export type Paste = PasteOptions & { type: typeof PASTE };
 
 export const GO_UP = "go-up";
 
-export interface GoUpOptions {
-    top?: boolean;
-}
-
-export interface GoUp extends GoUpOptions {
+export interface GoUp {
     type: typeof GO_UP;
+    top?: boolean;
 }
 
 export const RESTORE_TAB = "restore-tab";
 
-export interface RestoreTabOptions {}
-
-export interface RestoreTab extends RestoreTabOptions {
+export interface RestoreTab {
     type: typeof RESTORE_TAB;
 }
 
 export const START_SEARCH = "start-search";
 
-export interface StartSearchOptions {
-    caseSensitive?: boolean;
-}
-
-export interface StartSearch extends StartSearchOptions {
+export interface StartSearch {
     type: typeof START_SEARCH;
+    caseSensitive?: boolean;
 }
 
 export const SEARCH_JUMP = "search-jump";
 
-export interface SearchJumpOptions {
+export interface SearchJump {
+    type: typeof SEARCH_JUMP;
     wrapAround?: boolean;
     backward?: boolean;
-}
-
-export interface SearchJump extends SearchJumpOptions {
-    type: typeof SEARCH_JUMP;
 }
 
 export type Commands =

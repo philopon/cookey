@@ -2,33 +2,24 @@ import * as Dir from "./direction";
 
 export const SCROLL_BY = "scroll-by";
 
-export interface ScrollByOptions {
+export interface ScrollBy {
+    type: typeof SCROLL_BY;
     amount?: number;
     direction?: typeof Dir.HORIZONTAL | typeof Dir.VERTICAL;
 }
 
-export interface ScrollBy extends ScrollByOptions {
-    type: typeof SCROLL_BY;
-}
-
 export const SCROLL_TO = "scroll-to";
 
-export interface ScrollToOptions {
-    position: typeof Dir.TOP | typeof Dir.BOTTOM;
-}
-
-export interface ScrollTo extends ScrollToOptions {
+export interface ScrollTo {
     type: typeof SCROLL_TO;
+    position: typeof Dir.TOP | typeof Dir.BOTTOM;
 }
 
 export const HISTORY_GO = "history-go";
 
-export interface HistoryGoOptions {
-    amount: number;
-}
-
-export interface HistoryGo extends HistoryGoOptions {
+export interface HistoryGo {
     type: typeof HISTORY_GO;
+    amount: number;
 }
 
 export type Commands = ScrollBy | ScrollTo | HistoryGo;
