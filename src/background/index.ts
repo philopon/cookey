@@ -18,18 +18,19 @@ const config = new ConfigManager();
 
 async function dispatch(cmd: BC.Commands | C2B.Messages): Promise<B2C.Messages | void> {
     switch (cmd.type) {
-        case C2B.PULL_CONFIG:
-            const key = await config.load();
-            return B2C.SendConfig({
-                key,
-                ignore: config.ignore,
-                blurFocus: config.blurFocus,
-            });
+        case C2B.LOAD_CONFIG:
+            try {
+                const key = await config.load(cmd.force);
+                return B2C.SendConfig({
+                    key,
+                    ignore: config.ignore,
+                    blurFocus: config.blurFocus,
+                });
+            } catch (_) {
+                return await browser.runtime.openOptionsPage();
+            }
         case C2B.SUBMIT_QUERY:
             return await setQuery(cmd);
-        case C2B.RELOAD_CONFIG:
-            config.load(true);
-            return;
         case BC.SWITCH_TAB:
             return await switchTab(cmd);
         case BC.RELOAD:

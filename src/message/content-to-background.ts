@@ -1,11 +1,12 @@
-export const PULL_CONFIG = "PULL_CONFIG";
+export const LOAD_CONFIG = "LOAD_CONFIG";
 
-export interface PullConfig {
-    type: typeof PULL_CONFIG;
+export interface LoadConfig {
+    type: typeof LOAD_CONFIG;
+    force: boolean;
 }
 
-export function PullConfig(): PullConfig {
-    return { type: PULL_CONFIG };
+export function LoadConfig({ force }: Options<LoadConfig>): LoadConfig {
+    return { type: LOAD_CONFIG, force };
 }
 export const SUBMIT_QUERY = "SUBMIT_QUERY";
 
@@ -18,14 +19,4 @@ export function SubmitQuery(query: string): SubmitQuery {
     return { type: SUBMIT_QUERY, query };
 }
 
-export const RELOAD_CONFIG = "RELOAD_CONFIG";
-
-export interface ReloadConfig {
-    type: typeof RELOAD_CONFIG;
-}
-
-export function ReloadConfig(): ReloadConfig {
-    return { type: RELOAD_CONFIG };
-}
-
-export type Messages = PullConfig | SubmitQuery | ReloadConfig;
+export type Messages = LoadConfig | SubmitQuery;

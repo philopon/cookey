@@ -35,8 +35,8 @@ async function loadConfig(reload: boolean = false): Promise<void> {
     if (!reload && keyFeeder) {
         return;
     }
-    const config = await browser.runtime.sendMessage<C2B.PullConfig, B2C.SendConfig>(
-        C2B.PullConfig()
+    const config = await browser.runtime.sendMessage<C2B.LoadConfig, B2C.SendConfig>(
+        C2B.LoadConfig({ force: false })
     );
 
     setConfig(config);

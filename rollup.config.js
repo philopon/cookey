@@ -1,59 +1,16 @@
 import typescript from "rollup-plugin-typescript";
-import tsc from "typescript";
-import postcss from "rollup-plugin-postcss";
 import nodeResolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 
-import sass from "node-sass";
-import postcssModules from "postcss-modules";
-import cssnano from "cssnano";
-import crypto from "crypto";
-import BaseX from "base-x";
+import tsc from "typescript";
 
-import manifest from "./dist/manifest.json";
+function makeEntry(src, dst) {
+    const plugins = [
+        nodeResolve({ main: true, preferBuiltins: false }),
+        commonjs(),
+        typescript({ typescript: tsc }),
+    ];
 
-const base62 = BaseX("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
-function preprocessor(content, id) {
-    return new Promise((resolve, reject) => {
-        sass.render({ file: id }, (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve({ code: result.css.toString() });
-        });
-    });
-}
-
-const cssExportMap = {};
-function makeEntry(src, dst, style = false) {
-    const plugins = [nodeResolve({ main: true }), commonjs(), typescript({ typescript: tsc })];
-    if (style) {
-        plugins.push(
-            postcss({
-                preprocessor,
-                extensions: [".scss"],
-                plugins: [
-                    cssnano(),
-                    postcssModules({
-                        getJSON(id, exportTokens) {
-                            cssExportMap[id] = exportTokens;
-                        },
-                        generateScopedName(name, filename, css) {
-                            const hash = base62
-                                .encode(crypto.createHmac("sha256", filename + "/" + name).digest())
-                                .slice(0, 8);
-                            return `${manifest.name}_${name}_${hash}`;
-                        },
-                    }),
-                ],
-                getExportNamed: true,
-                getExport(id) {
-                    return cssExportMap[id];
-                },
-            })
-        );
-    }
     return {
         entry: "src/" + src,
         plugins,

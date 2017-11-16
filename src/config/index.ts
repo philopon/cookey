@@ -1,8 +1,10 @@
 import { AllCommands } from "../command";
 import { Tree, parseKey } from "../key";
 import { Config } from "./types";
+import schema from "./schema";
 
 import toml from "toml";
+import { Validator, ValidationError } from "jsonschema";
 
 export class ConfigManager {
     public key?: Tree<AllCommands>;
@@ -38,6 +40,17 @@ export async function loadConfigString(): Promise<string> {
     return config;
 }
 
+const validator = new Validator();
+
+export class ValidationFailed {
+    constructor(public errors: ValidationError[]) {}
+}
+
 export async function parseConfig(config: string): Promise<Config> {
-    return toml.parse(config);
+    const obj = toml.parse(config);
+    const errors = validator.validate(obj, schema).errors;
+    if (errors.length > 0) {
+        throw new ValidationFailed(errors);
+    }
+    return obj;
 }

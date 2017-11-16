@@ -19,6 +19,8 @@ declare namespace browser {
         };
 
         function getURL(path: string): string;
+
+        function openOptionsPage(): Promise<void>;
     }
 
     namespace tabs {

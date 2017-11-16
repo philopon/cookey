@@ -6,7 +6,9 @@ html
         link(rel="stylesheet" href="../css/options.css")
     body
         form
-            textarea.config
+            div.errors
+            div.config
             button.reset(type="button") reset
             button.save(type="submit") save
+            script(src="../js/vs/loader.js")
             script(src="../js/options.js")
