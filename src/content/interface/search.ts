@@ -81,7 +81,7 @@ export default class Searchbox {
         if (!this.loaded) {
             await this.load();
         }
-        this.iframe.style.visibility = "visible";
+        this.iframe.style.display = "";
         this.caseSensitive = caseSensitive;
         this.input.innerText = value;
         this.input.focus();
@@ -90,7 +90,7 @@ export default class Searchbox {
 
     hide(): void {
         this.iframe.blur();
-        this.iframe.style.visibility = "hidden";
+        this.iframe.style.display = "none";
     }
 
     set value(s: string) {
