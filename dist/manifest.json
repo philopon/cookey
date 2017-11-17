@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "cookey",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "applications": {
         "gecko": {
             "id": "{626517eb-4561-45ef-bc25-484a9e641dbe}"

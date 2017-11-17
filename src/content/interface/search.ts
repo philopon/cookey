@@ -64,6 +64,7 @@ export default class Searchbox {
         this.input.addEventListener("paste", event => this.onpaste(event));
 
         this.iframe.style.height = `${this.wrapper.clientHeight + 1}px`;
+        this.loaded = true;
         resolve();
     }
 
