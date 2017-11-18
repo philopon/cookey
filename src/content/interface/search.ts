@@ -2,16 +2,17 @@ import windowFind from "../../patch/window-find";
 import { SubmitQuery } from "../../message/content-to-background";
 
 export default class Searchbox {
-    private iframe: HTMLIFrameElement;
-    private wrapper: HTMLDivElement;
-    private input: HTMLDivElement;
+    private iframeElement: HTMLIFrameElement;
+    private wrapperElement: HTMLDivElement;
+    private inputElement: HTMLDivElement;
+    private infoElement: HTMLDivElement;
 
     private loaded: boolean = false;
     private prevent: boolean = false;
     private caseSensitive: boolean = false;
 
     constructor() {
-        const iframe = (this.iframe = document.createElement("iframe"));
+        const iframe = (this.iframeElement = document.createElement("iframe"));
         iframe.style.border = "none";
         iframe.style.position = "fixed";
         iframe.style.bottom = "0";
@@ -38,11 +39,16 @@ export default class Searchbox {
 
     onkeyup(_: KeyboardEvent): void {
         setTimeout(() => {
+            if (this.value.length <= 0) {
+                return;
+            }
+
             const selection = getSelection();
             selection.removeAllRanges();
             this.prevent = true;
-            this.value.length > 0 && windowFind(this.value, this.caseSensitive);
-            this.iframe.focus();
+            const found = windowFind(this.value, this.caseSensitive);
+            this.info = found ? "" : "(not found)";
+            this.iframeElement.focus();
             this.prevent = false;
         });
     }
@@ -54,16 +60,17 @@ export default class Searchbox {
     }
 
     onLoad(resolve: () => void): void {
-        const child = this.iframe.contentWindow.document;
-        this.wrapper = child.body.querySelector(".wrapper") as HTMLDivElement;
-        this.input = child.body.querySelector(".input") as HTMLDivElement;
+        const child = this.iframeElement.contentWindow.document;
+        this.wrapperElement = child.body.querySelector(".wrapper") as HTMLDivElement;
+        this.inputElement = child.body.querySelector(".input") as HTMLDivElement;
+        this.infoElement = child.body.querySelector(".info") as HTMLDivElement;
 
-        this.input.addEventListener("blur", () => this.prevent || this.hide());
-        this.input.addEventListener("keydown", event => this.onkeydown(event));
-        this.input.addEventListener("keyup", event => this.onkeyup(event));
-        this.input.addEventListener("paste", event => this.onpaste(event));
+        this.inputElement.addEventListener("blur", () => this.prevent || this.hide());
+        this.inputElement.addEventListener("keydown", event => this.onkeydown(event));
+        this.inputElement.addEventListener("keyup", event => this.onkeyup(event));
+        this.inputElement.addEventListener("paste", event => this.onpaste(event));
 
-        this.iframe.style.height = `${this.wrapper.clientHeight + 1}px`;
+        this.iframeElement.style.height = `${this.wrapperElement.clientHeight + 1}px`;
         this.loaded = true;
         resolve();
     }
@@ -71,9 +78,9 @@ export default class Searchbox {
     load(): Promise<void> {
         return new Promise(async resolve => {
             const html = await browser.runtime.getURL("html/search-box.html");
-            this.iframe.src = html;
-            this.iframe.addEventListener("load", () => this.onLoad(resolve));
-            document.body.appendChild(this.iframe);
+            this.iframeElement.src = html;
+            this.iframeElement.addEventListener("load", () => this.onLoad(resolve));
+            document.body.appendChild(this.iframeElement);
         });
     }
 
@@ -81,23 +88,27 @@ export default class Searchbox {
         if (!this.loaded) {
             await this.load();
         }
-        this.iframe.style.display = "";
+        this.iframeElement.style.display = "";
         this.caseSensitive = caseSensitive;
-        this.input.innerText = value;
-        this.input.focus();
-        this.iframe.contentWindow.document.execCommand("selectAll", false, null);
+        this.inputElement.innerText = value;
+        this.inputElement.focus();
+        this.iframeElement.contentWindow.document.execCommand("selectAll", false, null);
     }
 
     hide(): void {
-        this.iframe.blur();
-        this.iframe.style.display = "none";
+        this.iframeElement.blur();
+        this.iframeElement.style.display = "none";
     }
 
     set value(s: string) {
-        this.input.innerText = s;
+        this.inputElement.innerText = s;
     }
 
     get value(): string {
-        return this.input.innerText.trim();
+        return this.inputElement.innerText.trim();
+    }
+
+    set info(s: string) {
+        this.infoElement.innerText = s;
     }
 }
