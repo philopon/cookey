@@ -77,6 +77,8 @@ definitions:
         properties:
             type:
                 enum: [yank]
+            format:
+                type: string
 
     paste-current-tab:
         type: object

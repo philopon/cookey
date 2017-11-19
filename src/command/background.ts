@@ -36,6 +36,7 @@ export const YANK = "yank";
 
 export interface Yank {
     type: typeof YANK;
+    format?: string;
 }
 
 export const PASTE = "paste";

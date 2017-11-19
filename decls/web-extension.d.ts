@@ -29,6 +29,9 @@ declare namespace browser {
             index: number;
             pinned: boolean;
             url: string;
+            favIconUrl: string;
+            lastAccessed: number;
+            title: string;
         }
 
         interface Query {
