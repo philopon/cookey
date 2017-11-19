@@ -1,88 +1,88 @@
 blurFocus: true
 ignore:
-    ^https?://github.com.*$: [j, k]
+  ^https?://github.com.*$: [j, k]
 key:
-    l:
-        type: switch-tab
-        direction: right
-        # cycle: true
-    h:
-        type: switch-tab
-        direction: left
-        # cycle: true
-    r:
-        type: reload
-        # bypassCache: false
-    R:
-        type: reload
-        bypassCache: true
-    j:
-        type: scroll-by
-        # amount: 200
-        # direction: vertical
-    k:
-        type: scroll-by
-        amount: -200
-        # direction: vertical
-    C-h:
-        type: scroll-by
-        amount: -200
-        direction: horizontal
-    C-l:
-        type: scroll-by
-        # amount: 200
-        direction: horizontal
-    t:
-        type: new-tab
-        url: https://google.com
-        background: true
-        # position: last
-    d:
-        type: close-tab
-        dontCloseLastTab: true
-        dontClosePinnedTab: true
-    G:
-        type: scroll-to
-        position: bottom
-    g g:
-        type: scroll-to
-        position: top
-    y y:
-        type: yank
-        # format: "${url}"
-    y m:
-        type: yank
-        format: "[${title}](${url})"
-    p:
-        type: paste
-        # newTab: false
-    P:
-        type: paste
-        newTab: true
-        background: false
-        position: right
-    g u:
-        type: go-up
-        # top: false
-    g U:
-        type: go-up
-        top: true
-    H:
-        type: history-go
-        amount: -1
-    L:
-        type: history-go
-        amount: 1
-    u:
-        type: restore-tab
-    /:
-        type: start-search
-        # caseSensitive: false
-    n:
-        type: search-jump
-        # backward: false
-        # wrapAround: true
-    N:
-        type: search-jump
-        backward: true
-        # wrapAround: true
+  l:
+    type: switch-tab
+    direction: right
+    # cycle: true
+  h:
+    type: switch-tab
+    direction: left
+    # cycle: true
+  r:
+    type: reload
+    # bypassCache: false
+  R:
+    type: reload
+    bypassCache: true
+  j:
+    type: scroll-by
+    # amount: 200
+    # direction: vertical
+  k:
+    type: scroll-by
+    amount: -200
+    # direction: vertical
+  C-h:
+    type: scroll-by
+    amount: -200
+    direction: horizontal
+  C-l:
+    type: scroll-by
+    # amount: 200
+    direction: horizontal
+  t:
+    type: new-tab
+    url: about:blank
+    # background: false
+    # position: last
+  d:
+    type: close-tab
+    dontCloseLastTab: true
+    dontClosePinnedTab: true
+  G:
+    type: scroll-to
+    position: bottom
+  g g:
+    type: scroll-to
+    position: top
+  y y:
+    type: yank
+    # format: "${url}"
+  y m:
+    type: yank
+    format: "[${title}](${url})"
+  p:
+    type: paste
+    # newTab: false
+  P:
+    type: paste
+    newTab: true
+    background: false
+    position: right
+  g u:
+    type: go-up
+    # top: false
+  g U:
+    type: go-up
+    top: true
+  H:
+    type: history-go
+    amount: -1
+  L:
+    type: history-go
+    amount: 1
+  u:
+    type: restore-tab
+  /:
+    type: start-search
+    # caseSensitive: false
+  n:
+    type: search-jump
+    # backward: false
+    # wrapAround: true
+  N:
+    type: search-jump
+    backward: true
+    # wrapAround: true
