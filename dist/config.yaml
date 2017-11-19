@@ -36,7 +36,7 @@ key:
     type: new-tab
     url: https://google.com
     background: true
-    # position: "last"
+    # position: last
   d:
     type: close-tab
     dontCloseLastTab: true
