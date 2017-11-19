@@ -3,6 +3,7 @@
     "devDependencies": {
         "aurel": "0.3.2",
         "copyfiles": "~1.2.0",
+        "js-yaml": "~3.10.0",
         "jsonschema": "~1.2.0",
         "material-design-color": "~2.3.2",
         "monaco-editor": "~0.10.1",
@@ -15,7 +16,6 @@
         "rollup-plugin-commonjs": "~8.2.6",
         "rollup-plugin-node-resolve": "~3.0.0",
         "rollup-plugin-typescript": "~0.8.1",
-        "toml": "~2.3.3",
         "typescript": "~2.6.1",
         "url": "~0.11.0",
         "web-ext": "~2.2.2"

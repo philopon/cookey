@@ -3,7 +3,7 @@ import { Tree, parseKey } from "../key";
 import { Config } from "./types";
 import schema from "./schema";
 
-import toml from "toml";
+import yaml from "js-yaml";
 import { Validator, ValidationError } from "jsonschema";
 
 export class ConfigManager {
@@ -28,7 +28,7 @@ export class ConfigManager {
 }
 
 export async function getDefaultConfigString(): Promise<string> {
-    const response = await fetch(browser.runtime.getURL("config.toml"));
+    const response = await fetch(browser.runtime.getURL("config.yaml"));
     return await response.text();
 }
 
@@ -47,7 +47,7 @@ export class ValidationFailed {
 }
 
 export async function parseConfig(config: string): Promise<Config> {
-    const obj = toml.parse(config);
+    const obj = yaml.safeLoad<Config>(config);
     const errors = validator.validate(obj, schema).errors;
     if (errors.length > 0) {
         throw new ValidationFailed(errors);

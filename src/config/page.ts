@@ -1,23 +1,9 @@
 import { getDefaultConfigString, loadConfigString, parseConfig, ValidationFailed } from ".";
 import { LoadConfig } from "../message/content-to-background";
 import { ValidationError } from "jsonschema";
-import {} from "monaco-editor";
+import yaml from "js-yaml";
 
-interface TomlError {
-    message: string;
-    line: number;
-    column: number;
-    name: string;
-}
-
-function isTomlError(e: any): e is TomlError {
-    return (
-        typeof e.message === "string" &&
-        typeof e.line === "number" &&
-        typeof e.column === "number" &&
-        typeof e.name === "string"
-    );
-}
+import {} from "monaco-editor"; // load type declaration
 
 function createCell(text: string, ...classes: string[]) {
     const cell = document.createElement("span");
@@ -28,15 +14,15 @@ function createCell(text: string, ...classes: string[]) {
     return cell;
 }
 
-function createTomlErrorElement(e: TomlError) {
+function createYamlErrorElement(e: yaml.YAMLException) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("error");
-    wrapper.classList.add("toml");
+    wrapper.classList.add("yaml");
 
-    wrapper.appendChild(createCell("toml" + e.name, "category"));
-    wrapper.appendChild(createCell(e.line.toString(), "line"));
-    wrapper.appendChild(createCell(e.column.toString(), "column"));
-    wrapper.appendChild(createCell(e.message, "message"));
+    wrapper.appendChild(createCell(e.name, "category"));
+    wrapper.appendChild(createCell(e.mark.line.toString(), "line"));
+    wrapper.appendChild(createCell(e.mark.column.toString(), "column"));
+    wrapper.appendChild(createCell(e.reason, "message"));
 
     return wrapper;
 }
@@ -90,14 +76,14 @@ async function main() {
         try {
             await parseConfig(text);
         } catch (e) {
-            if (isTomlError(e)) {
-                errors.appendChild(createTomlErrorElement(e));
+            if (e instanceof yaml.YAMLException) {
+                console.log(e);
+                errors.appendChild(createYamlErrorElement(e));
             } else if (e instanceof ValidationFailed) {
                 for (const error of e.errors) {
                     errors.appendChild(createValidationErrorElement(error));
                 }
             }
-            console.warn(e);
             return;
         }
 
