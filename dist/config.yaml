@@ -12,31 +12,31 @@ key:
     # cycle: true
   r:
     type: reload
-    # bypassCache = false
+    # bypassCache: false
   R:
     type: reload
     bypassCache: true
   j:
     type: scroll-by
-    # amount = 200
-    # direction = "vertical"
+    # amount: 200
+    # direction: vertical
   k:
     type: scroll-by
     amount: -200
-    # direction = "vertical"
+    # direction: vertical
   C-h:
     type: scroll-by
     amount: -200
     direction: horizontal
   C-l:
     type: scroll-by
-    # amount = 200
+    # amount: 200
     direction: horizontal
   t:
     type: new-tab
-    url: 'https://google.com'
+    url: https://google.com
     background: true
-    # position = "last"
+    # position: "last"
   d:
     type: close-tab
     dontCloseLastTab: true
@@ -51,7 +51,7 @@ key:
     type: yank
   p:
     type: paste
-    # newTab = false
+    # newTab: false
   P:
     type: paste
     newTab: true
@@ -59,7 +59,7 @@ key:
     position: right
   g u:
     type: go-up
-    # top = false
+    # top: false
   g U:
     type: go-up
     top: true
@@ -73,12 +73,12 @@ key:
     type: restore-tab
   /:
     type: start-search
-    # caseSensitive = false
+    # caseSensitive: false
   n:
     type: search-jump
     # backward: false
-    # wrapAround = true
+    # wrapAround: true
   N:
     type: search-jump
     backward: true
-    # wrapAround = true
+    # wrapAround: true
