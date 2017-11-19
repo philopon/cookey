@@ -52,7 +52,10 @@ async function main() {
     if (!config) {
         return;
     }
-    const editor = monaco.editor.create(config, { value: await loadConfigString() });
+    const editor = monaco.editor.create(config, {
+        value: await loadConfigString(),
+        language: "yaml",
+    });
 
     const reset = document.querySelector<HTMLButtonElement>(".reset");
     if (!reset) {
