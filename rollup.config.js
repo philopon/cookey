@@ -1,11 +1,13 @@
 import typescript from "rollup-plugin-typescript";
 import nodeResolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
+import yaml from "rollup-plugin-yaml";
 
 import tsc from "typescript";
 
 function makeEntry(src, dst) {
     const plugins = [
+        yaml(),
         nodeResolve({ main: true, preferBuiltins: false }),
         commonjs(),
         typescript({ typescript: tsc }),

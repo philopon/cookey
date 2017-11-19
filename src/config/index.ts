@@ -1,7 +1,7 @@
 import { AllCommands } from "../command";
 import { Tree, parseKey } from "../key";
 import { Config } from "./types";
-import schema from "./schema";
+import schema from "./schema.yaml";
 
 import yaml from "js-yaml";
 import { Validator, ValidationError } from "jsonschema";

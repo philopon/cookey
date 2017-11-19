@@ -16,6 +16,7 @@
         "rollup-plugin-commonjs": "~8.2.6",
         "rollup-plugin-node-resolve": "~3.0.0",
         "rollup-plugin-typescript": "~0.8.1",
+        "rollup-plugin-yaml": "~1.1.0",
         "typescript": "~2.6.1",
         "url": "~0.11.0",
         "web-ext": "~2.2.2"
@@ -37,7 +38,7 @@
         "dev:bundle": "run-s \"build:bundle -- -w\"",
         "dev:html": "aurel -w pug -s build:html",
         "dev:css": "aurel -w sass -s build:css",
-        "dev:monaco": "run-s \"build:monaco -- -w\"",
+        "dev:monaco": "run-p \"build:monaco:yaml -- -w\" \"build:monaco:main -- -w\"",
         "dev:web-ext": "web-ext run -s dist --bc",
         "clean": "rimraf js dist/js/ dist/css/ dist/html/ web-ext-artifacts"
     }

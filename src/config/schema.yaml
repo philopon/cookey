@@ -1,0 +1,213 @@
+---
+$schema: 'http://json-schema.org/draft-06/schema#'
+type: object
+additionalProperties: false
+definitions:
+    switch-tab:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [switch-tab]
+            direction:
+                enum: [left, right]
+            cycle:
+                type: boolean
+        required:
+            - direction
+
+    reload:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [reload]
+            bypassCache:
+                type: boolean
+
+    scroll-by:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [scroll-by]
+            amount:
+                type: number
+            direction:
+                enum: [horizontal, vertical]
+
+    new-tab:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [new-tab]
+            url:
+                type: string
+            background:
+                type: boolean
+            position:
+                enum: [first, last, right, left]
+
+    close-tab:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [close-tab]
+            dontCloseLastTab:
+                type: boolean
+            dontClosePinnedTab:
+                type: boolean
+
+    scroll-to:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [scroll-to]
+            position:
+                enum: [top, bottom]
+        required:
+            - position
+
+    yank:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [yank]
+
+    paste-current-tab:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [paste]
+            newTab:
+                enum: [false]
+
+    paste-new-tab:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [paste]
+            newTab:
+                enum: [true]
+            background:
+                type: boolean
+            position:
+                enum: [first, last, right, left]
+        required:
+            - newTab
+    paste:
+        oneOf:
+            - $ref: "#/definitions/paste-current-tab"
+            - $ref: "#/definitions/paste-new-tab"
+
+    go-up:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [go-up]
+            top:
+                type: boolean
+
+    history-go:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [history-go]
+            amount:
+                type: number
+        required:
+            - amount
+
+    restore-tab:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [restore-tab]
+
+    start-search:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [start-search]
+            caseSensitive:
+                type: boolean
+
+    search-jump:
+        type: object
+        additionalProperties: false
+        properties:
+            type:
+                enum: [search-jump]
+            backward:
+                type: boolean
+            wrapAround:
+                type: boolean
+
+properties:
+    blurFocus:
+        type: boolean
+    ignore:
+        type: object
+        additionalProperties: false
+        patternProperties:
+            .*:
+                type: array
+                items:
+                    type: string
+    key:
+        type: object
+        additionalProperties: false
+        patternProperties:
+            .*:
+                required:
+                    - type
+                anyOf:
+                    -
+                        id: switch-tab
+                        $ref: "#/definitions/switch-tab"
+                    -
+                        id: reload
+                        $ref: "#/definitions/reload"
+                    -
+                        id: scroll-by
+                        $ref: "#/definitions/scroll-by"
+                    -
+                        id: new-tab
+                        $ref: "#/definitions/new-tab"
+                    -
+                        id: close-tab
+                        $ref: "#/definitions/close-tab"
+                    -
+                        id: scroll-to
+                        $ref: "#/definitions/scroll-to"
+                    -
+                        id: yank
+                        $ref: "#/definitions/yank"
+                    -
+                        id: paste
+                        $ref: "#/definitions/paste"
+                    -
+                        id: go-up
+                        $ref: "#/definitions/go-up"
+                    -
+                        id: history-go
+                        $ref: "#/definitions/history-go"
+                    -
+                        id: restore-tab
+                        $ref: "#/definitions/restore-tab"
+                    -
+                        id: start-search
+                        $ref: "#/definitions/start-search"
+                    -
+                        id: search-jump
+                        $ref: "#/definitions/search-jump"
