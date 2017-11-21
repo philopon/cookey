@@ -37,7 +37,7 @@ async function loadConfig(reload: boolean = false): Promise<void> {
         return;
     }
     const config = await browser.runtime.sendMessage<C2B.LoadConfig, B2C.SendConfig>(
-        C2B.LoadConfig({ force: false })
+        C2B.LoadConfig({ reload: false, mode: "return" })
     );
 
     setConfig(config);

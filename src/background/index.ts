@@ -20,12 +20,24 @@ async function dispatch(cmd: BC.Commands | C2B.Messages): Promise<B2C.Messages |
     switch (cmd.type) {
         case C2B.LOAD_CONFIG:
             try {
-                const key = await config.load(cmd.force);
-                return B2C.SendConfig({
+                const key = await config.load(cmd.reload);
+                const cfg = B2C.SendConfig({
                     key,
                     ignore: config.ignore,
                     blurFocus: config.blurFocus,
                 });
+
+                switch (cmd.mode) {
+                    case "return":
+                        return cfg;
+                    case "allTabs":
+                        const tabs = await browser.tabs.query({});
+                        await Promise.all(tabs.map(tab => browser.tabs.sendMessage(tab.id, cfg)));
+                        return;
+                    default:
+                        exhaustiveCheck(cmd.mode);
+                        return;
+                }
             } catch (_) {
                 return await browser.runtime.openOptionsPage();
             }
