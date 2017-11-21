@@ -6,7 +6,7 @@ const pattern = /\${(title|fav|fav.url|lastAccessed|url)}/gi;
 
 export default async function yank({ format }: Options<Yank>): Promise<SetClipboard> {
     if (!format) {
-        format = "{{{url}}}";
+        format = "${url}";
     }
 
     const [active] = await browser.tabs.query({ active: true });
