@@ -80,6 +80,7 @@ async function main() {
             await parseConfig(text);
         } catch (e) {
             if (e instanceof yaml.YAMLException) {
+                console.log(e);
                 errors.appendChild(createYamlErrorElement(e));
             } else if (e instanceof ValidationFailed) {
                 for (const error of e.errors) {
@@ -90,7 +91,7 @@ async function main() {
         }
 
         await browser.storage.sync.set({ config: text });
-        await browser.runtime.sendMessage(LoadConfig({ reload: true, mode: "allTabs" }));
+        await browser.runtime.sendMessage(LoadConfig({ force: true }));
     };
 
     config.addEventListener("keypress", event => {

@@ -16,33 +16,16 @@ import { ConfigManager } from "../config";
 
 const config = new ConfigManager();
 
-async function dispatch(
-    cmd: BC.Commands | C2B.Messages,
-    sender: browser.runtime.MessageSender
-): Promise<void | B2C.SendConfig> {
+async function dispatch(cmd: BC.Commands | C2B.Messages): Promise<B2C.Messages | void> {
     switch (cmd.type) {
         case C2B.LOAD_CONFIG:
             try {
-                const key = await config.load(cmd.reload);
-                const sendConfig = B2C.SendConfig({
+                const key = await config.load(cmd.force);
+                return B2C.SendConfig({
                     key,
                     ignore: config.ignore,
                     blurFocus: config.blurFocus,
                 });
-
-                switch (cmd.mode) {
-                    case "return":
-                        return sendConfig;
-                    case "allTabs":
-                        const tabs = await browser.tabs.query({});
-                        await Promise.all(
-                            tabs.map(tab => browser.tabs.sendMessage(tab.id, sendConfig))
-                        );
-                        return;
-                    default:
-                        exhaustiveCheck(cmd.mode);
-                        return sendConfig;
-                }
             } catch (_) {
                 return await browser.runtime.openOptionsPage();
             }
@@ -57,8 +40,7 @@ async function dispatch(
         case BC.CLOSE_TAB:
             return await closeTab(cmd);
         case BC.YANK:
-            await browser.tabs.sendMessage(sender.tab.id, yank(sender.tab, cmd));
-            return;
+            return await yank(cmd);
         case BC.PASTE:
             return await paste(cmd);
         case BC.GO_UP:
@@ -66,11 +48,9 @@ async function dispatch(
         case BC.RESTORE_TAB:
             return await restoreTab(cmd);
         case BC.START_SEARCH:
-            await browser.tabs.sendMessage(sender.tab.id, startSearch(cmd));
-            return;
+            return await startSearch(cmd);
         case BC.SEARCH_JUMP:
-            await browser.tabs.sendMessage(sender.tab.id, searchJump(cmd));
-            return;
+            return await searchJump(cmd);
         default:
             exhaustiveCheck(cmd);
             return cmd;

@@ -2,12 +2,11 @@ export const LOAD_CONFIG = "LOAD_CONFIG";
 
 export interface LoadConfig {
     type: typeof LOAD_CONFIG;
-    reload: boolean;
-    mode: "allTabs" | "return";
+    force: boolean;
 }
 
-export function LoadConfig(args: Options<LoadConfig>): LoadConfig {
-    return { type: LOAD_CONFIG, ...args };
+export function LoadConfig({ force }: Options<LoadConfig>): LoadConfig {
+    return { type: LOAD_CONFIG, force };
 }
 export const SUBMIT_QUERY = "SUBMIT_QUERY";
 
