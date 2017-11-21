@@ -4,25 +4,23 @@ import { sanitize } from "../../utils";
 
 const pattern = /\${(title|fav|fav.url|lastAccessed|url)}/gi;
 
-export default async function yank({ format }: Options<Yank>): Promise<SetClipboard> {
+export default function yank(tab: browser.tabs.Tab, { format }: Options<Yank>): SetClipboard {
     if (!format) {
         format = "${url}";
     }
-
-    const [active] = await browser.tabs.query({ active: true, currentWindow: true });
 
     function replacer(_: string, matched: string): string {
         matched = matched.toLowerCase();
         switch (matched) {
             case "title":
-                return sanitize(active.title);
+                return sanitize(tab.title);
             case "fav":
             case "fav.url":
-                return active.favIconUrl;
+                return tab.favIconUrl;
             case "lastaccessed":
-                return active.lastAccessed.toString();
+                return tab.lastAccessed.toString();
             case "url":
-                return active.url;
+                return tab.url;
             default:
                 return "??";
         }

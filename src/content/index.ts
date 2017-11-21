@@ -37,7 +37,7 @@ async function loadConfig(reload: boolean = false): Promise<void> {
         return;
     }
     const config = await browser.runtime.sendMessage<C2B.LoadConfig, B2C.SendConfig>(
-        C2B.LoadConfig({ force: false })
+        C2B.LoadConfig({ reload: false, mode: "return" })
     );
 
     setConfig(config);
@@ -113,9 +113,7 @@ async function dispatchLoop(cmd: AllCommands | B2C.Messages | C2B.Messages): Pro
     }
 }
 
-async function dispatch(
-    cmd: CC.Commands | B2C.Messages
-): Promise<BC.Commands | C2B.Messages | void> {
+async function dispatch(cmd: CC.Commands | B2C.Messages): Promise<void> {
     switch (cmd.type) {
         case CC.SCROLL_BY:
             return scroller.scrollBy(cmd);
@@ -137,7 +135,4 @@ async function dispatch(
     }
 }
 
-browser.runtime.onMessage.addListener<
-    B2C.Messages | CC.Commands,
-    C2B.Messages | BC.Commands | void
->(dispatch);
+browser.runtime.onMessage.addListener<B2C.Messages | CC.Commands>(dispatch);
