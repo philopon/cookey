@@ -36,6 +36,7 @@ declare namespace browser {
 
         interface Query {
             active?: boolean;
+            currentWindow?: boolean;
         }
 
         function query(query: Query): Promise<Tab[]>;

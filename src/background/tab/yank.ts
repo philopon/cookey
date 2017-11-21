@@ -9,7 +9,7 @@ export default async function yank({ format }: Options<Yank>): Promise<SetClipbo
         format = "${url}";
     }
 
-    const [active] = await browser.tabs.query({ active: true });
+    const [active] = await browser.tabs.query({ active: true, currentWindow: true });
 
     function replacer(_: string, matched: string): string {
         matched = matched.toLowerCase();

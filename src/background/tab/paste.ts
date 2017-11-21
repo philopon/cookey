@@ -8,7 +8,7 @@ export default async function paste(args: PasteOptions): Promise<void> {
         const opts: Options<NewTab> = Object.assign({}, args, { url });
         await newTab(opts);
     } else {
-        const [active] = await browser.tabs.query({ active: true });
+        const [active] = await browser.tabs.query({ active: true, currentWindow: true });
         await browser.tabs.update(active.id, { url });
     }
 }

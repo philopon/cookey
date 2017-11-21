@@ -4,8 +4,8 @@ import { clip, euclideanMod } from "../../utils";
 
 export default async function switchTab({ direction, cycle }: Options<SwitchTab>): Promise<void> {
     const [[active], tabs] = await Promise.all([
-        browser.tabs.query({ active: true }),
-        browser.tabs.query({}),
+        browser.tabs.query({ active: true, currentWindow: true }),
+        browser.tabs.query({ currentWindow: true }),
     ]);
     const dc = direction === LEFT ? -1 : 1;
     const idx = (cycle === undefined ? true : cycle)

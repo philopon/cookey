@@ -6,7 +6,7 @@ function dirname(p: string): string {
 }
 
 export default async function goUp({ top }: Options<GoUp>): Promise<void> {
-    const [active] = await browser.tabs.query({ active: true });
+    const [active] = await browser.tabs.query({ active: true, currentWindow: true });
     const url = new URL(active.url);
     url.pathname = top ? "/" : dirname(url.pathname);
     await browser.tabs.update(active.id, { url: url.toString() });

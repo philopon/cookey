@@ -17,7 +17,7 @@ export default async function openPage({
             break;
         case LEFT:
         case RIGHT:
-            const [active] = await browser.tabs.query({ active: true });
+            const [active] = await browser.tabs.query({ active: true, currentWindow: true });
             options.index = position === LEFT ? active.index : active.index + 1;
             break;
         default:
