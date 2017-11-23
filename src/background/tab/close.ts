@@ -7,6 +7,10 @@ export default async function removeTab({
     if (dontCloseLastTab) {
         const all = await browser.tabs.query({ currentWindow: true });
         if (all.length === 1) {
+            if (typeof dontCloseLastTab === "string") {
+                await browser.tabs.create({ active: true, url: dontCloseLastTab });
+                await browser.tabs.remove(all[0].id);
+            }
             return;
         }
     }

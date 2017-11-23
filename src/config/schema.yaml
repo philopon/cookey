@@ -56,7 +56,7 @@ definitions:
       type:
         enum: [close-tab]
       dontCloseLastTab:
-        type: boolean
+        type: [boolean, string]
       dontClosePinnedTab:
         type: boolean
 

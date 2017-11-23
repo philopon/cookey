@@ -28,7 +28,7 @@ export const CLOSE_TAB = "close-tab";
 
 export interface CloseTab {
     type: typeof CLOSE_TAB;
-    dontCloseLastTab?: boolean;
+    dontCloseLastTab?: boolean | string;
     dontClosePinnedTab?: boolean;
 }
 
